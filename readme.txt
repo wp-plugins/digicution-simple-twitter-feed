@@ -53,7 +53,7 @@ PHP's mcrypt library is also recommended but not essential.
 
 == Installation ==
 
-1. Upload the folder 'digicution-twitter' to the '/wp-content/plugins/' directory
+1. Upload the folder 'digicution-simple-twitter-feed' to the '/wp-content/plugins/' directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
 3. Create your Twitter Application at https://dev.twitter.com/ and create a set of API Keys for your application.
 4. Add the Access Token, Access Token Secret, Consumer Key & Consumer Secret to Main Page of 'Simple Twitter' Options Page
