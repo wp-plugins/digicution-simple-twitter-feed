@@ -1,0 +1,96 @@
+/*///////////////////////////////////////////////////////
+//////  Digicution Simple Twitter Feed Admin CSS  ///////
+///////////////////////////////////////////////////////*/
+
+
+/* Header CSS */
+.wrap.dt 												{ margin-left:6px; }
+h2.dt_header 											{ background: url("../images/digicution-twitter-logo.jpg") top left no-repeat;	padding-left: 140px; padding-bottom:10px; padding-top:13px; margin-top:20px; border-bottom: 1px #dfdfdf solid; margin-bottom:20px; height:35px; margin-right:2%; }
+.request												{ float:right; font-size:14px; display:block; }
+.request a												{ font-weight:bold; }
+
+/* Form CSS */
+table 													{ border:none; }
+.widefat 												{ margin-bottom:20px; }
+.map-display input 										{ margin-right: 5px; }
+.map-dimensions input 									{ width: 50px; margin-right: 5px; margin-left:5px; }
+.search-type input 										{ margin-right: 5px; }
+
+/* CSS Reset */
+#dt div, #dt span, #dt applet, #dt object, #dt iframe, 
+#dt h1, #dt h3, #dt h4, #dt h5, #dt h6, #dt blockquote, 
+#dt pre, #dt a, #dt abbr, #dt acronym, #dt address, 
+#dt big, #dt cite, #dt code, #dt del, #dt dfn, #dt em, 
+#dt font, #dt img, #dt ins, #dt kbd, #dt q, #dt s, 
+#dt samp, #dt strike, #dt strong, #dt sub, #dt sup, 
+#dt tt, #dt var, #dt b, #dt u, #dt i, #dt center, 
+#dt dl, #dt dt, #dt dd, #dt ol, #dt ul, #dt li,
+#dt fieldset, #dt form, #dt label, #dt legend, 
+#dt caption  											{ margin: 0; padding: 0; border: 0; outline: 0; vertical-align: baseline; }
+#dt ol, #dt ul 											{ list-style:none; margin: 0; padding: 0; }
+#dt :focus 												{ outline: 0; }
+#dt table 												{ border-collapse: collapse; border-spacing: 0; }
+
+/* Globals CSS */
+#dt 													{ width: 98%; font-size: 13px; }
+#dt a 													{ text-decoration: none; }
+#dt .clearer 											{ clear: both; }
+#dt legend, #dt h4 										{ font-size: 15px; font-weight: bold; font-style: italic; }
+#dt h4 													{ margin-bottom: 19px; margin-top: 4px; }
+#dt h5 													{ font: bold 15px Georgia, "Times New Roman", Times, serif; color: #5f7176; text-shadow: #fff 0 1px 0; }
+#dt h6 													{ color: #666; text-shadow: #fff 0 1px 0; font: bold 11px Georgia, "Times New Roman", Times, serif; margin-bottom: 10px; }
+
+/* Main Layout CSS */
+#dt.main input.text:focus 								{ background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#fff)); background: -moz-linear-gradient(top, #fff, #fff); border: 1px solid #aaa; }
+#dt.main textarea.textarea:focus 						{ background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#fff)); background: -moz-linear-gradient(top, #fff, #fff); border: 1px solid #aaa; }
+#dt.main legend 										{ color: #444; font-size: 15px; font-weight: bold; font-style: italic; }
+.validation 											{ color:#b90909 !important; }
+#dt .rounded 											{ -webkit-border-radius: 3px; -moz-border-radius: 3px;	border-radius: 3px; }
+#dt.main #dt-tabbed-area 								{ border: 1px solid #e5e5e5; padding: 8px 8px 0; background-color: #f5f5f5; }
+#dt #dt-tabbed-area 									{ border: 1px solid #d2e5ee; background-color: #eff8ff; padding: 8px 8px 0; min-height: 300px; }
+#dt .pane-content				 						{ margin-bottom: -10px; display:block; }
+
+/* Left Pane CSS */
+#dt #dt-tabbed-area .left-area 							{ float: left; padding: 0; margin: 1px 0 0; width: 19%; text-shadow: #fff 0 1px 0px; }
+#dt.main .left-area ul li 								{ border-bottom: 1px solid #e0e2e2; }
+#dt.main .left-area ul li a.active 						{ border: 1px solid #e5e5e5; border-right-style: none; }
+#dt .left-area ul li 									{ border-bottom: 1px solid #d2e5ee; }
+#dt .left-area ul li a 									{ display: block; padding-top: 10px; padding-bottom: 10px; padding-left: 8px; font-weight: bold; }
+#dt .left-area ul li a.active 							{ color: #d54e21; position: relative; z-index: 2; border-top: 1px solid #d2e5ee; padding-top: 10px; border-bottom: 1px solid #d2e5ee; padding-bottom: 10px; background-color: #fff; -webkit-border-top-left-radius: 3px; -webkit-border-bottom-left-radius: 3px; -moz-border-radius-topleft: 3px; -moz-border-radius-bottomleft: 3px; border-top-left-radius: 3px; border-bottom-left-radius: 3px; border-left: 1px solid #d2e5ee; margin: -1px -1px -1px -3px; padding-left: 10px; }
+#dt .left-area ul li span.inactive 						{ display: block; padding-top: 10px; padding-bottom: 10px; padding-left: 8px; font-weight: bold; color:#999999; }
+
+/* Right Pane CSS */
+#dt.main #dt-tabbed-area .right-area 					{ border: 1px solid #dfdfdf; }
+#dt #dt-tabbed-area .right-area 						{ padding-top: 4px; background-color: #fff; margin-left: 19%; border: 1px solid #d2e5ee; padding-left: 14px; -webkit-border-top-right-radius: 3px; -webkit-border-bottom-right-radius: 3px; -moz-border-radius-topright: 3px; -moz-border-radius-bottomright: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; position: relative; min-height: 350px; }
+
+/* Form CSS */
+#dt.main fieldset 										{ border: 1px solid #e1e1e1; background: #f6f6f6; }
+#dt fieldset 											{ border: 1px solid #d2e5ee; background: #f7fcfe; width: 95.5%; padding: 10px; }
+#dt input.checkbox 										{ vertical-align: middle; margin-bottom: 4px; margin-right: 4px; }
+#dt input.text, #dt #dt-ad-set-input-area input 		{ border: 1px solid #d3d3d3; background: -webkit-gradient(linear, left top, left bottom, from(#f9f9f9), to(#fff)); background: -moz-linear-gradient(top, #f9f9f9, #fff); width: 30%; margin-right: 5px; }
+#dt input.text-array 									{ border: 1px solid #d3d3d3; background: -webkit-gradient(linear, left top, left bottom, from(#f9f9f9), to(#fff)); background: -moz-linear-gradient(top, #f9f9f9, #fff); margin-right: 5px; width: 350px; }
+#dt textarea.textarea 									{ border: 1px solid #d3d3d3; background: -webkit-gradient(linear, left top, left bottom, from(#f9f9f9), to(#fff)); background: -moz-linear-gradient(top, #f9f9f9, #fff); margin-top: 5px; margin-bottom: 5px; height: auto; width: 100%; }
+#dt select.list 										{ width: 30%; margin-right: 5px; }
+#dt .button 											{ background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ccc)); background: -moz-linear-gradient(top, #fff, #ccc); border-color: #ccc; }
+#dt .button:active 										{ background: -webkit-gradient(linear, left top, left bottom, from(#ccc), to(#fff)); background: -moz-linear-gradient(top, #ccc, #fff); }
+#dt .button:hover 										{ border: 1px solid #aaa; color: #5f7176; }
+.dtbutton 												{ margin-top: 10px; }
+.iubutton 												{ cursor:pointer; cursor:hand; padding-left:5px; padding-right:5px; }
+.inputholder 											{ display:block; clear:both;}
+.inputholder.bottomgap 									{ margin-bottom:20px !important; }
+
+/* Settings Area CSS */
+#dt .dt-setting 										{ padding-top: 6px; padding-bottom: 6px; }
+#dt-form .dt-setting 									{ position: relative; }
+.dt-setting label 										{ margin:0; padding:0; display:block; width:200px; text-align:left; vertical-align:middle; margin-bottom:5px !important; margin-left:5px !important;  }
+.dt-setting input, 
+.dt-setting select										{ display:block; width:auto; height:25px; margin-left:5px; }
+p.labeldesc												{ margin:0; padding:0; line-height:11px; font-size:11px; font-style:italic; margin-left:5px; margin-top:3px !important; margin-bottom:7px !important; color:#727171; }
+.left													{ float:left; }
+
+/* Footer Link CSS */
+p#dt-trademark 											{ color: #bbc4c5; margin-top:10px; text-align: right; }
+p#dt-trademark em 										{ color: #99a2ab; }
+
+.modcoder_excolor										{ display:none;float:left; height:100% !important; }
+.modcoder_excolor_clrbox								{ display:none;float:left; height:100% !important; }
