@@ -1,6 +1,6 @@
 <?php /**
 Plugin Name: Digicution Simple Twitter Feed
-Version: 1.0
+Version: 1.1
 Plugin URI: http://www.digicution.com/wordpress-simple-twitter-feed/
 Description: This plugin provides a simple list of Tweets from a users screen name for usage within your Wordpress Blog or Template
 Author: Dan Perkins @ Digicution
@@ -105,6 +105,7 @@ function dt_install() {
 	add_option('dt_twitter_post_favourite',0);
 	add_option('dt_twitter_hashtag_convert',1);
 	add_option('dt_twitter_username_convert',1);
+	add_option('dt_twitter_image_bradius',0);
 	
 	//Add New API 1.1 OAuth Access Requirement Options
 	add_option('dt_twitter_oauth_access_token',NULL);	
@@ -169,10 +170,10 @@ class dt_twitter_widget extends WP_Widget {
 		//Write Form
 		?>
 		<p>
-		<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" />
-		Simply add the title for your Twitter Feed in the box above or leave it blank if you just wish to show the Feed on it's own.
+		<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php _e($title,'dt_twitter'); ?>" />
+		<?php _e('Simply add the title for your Twitter Feed in the box above or leave it blank if you just wish to show the Feed on it\'s own.','dt_twitter'); ?>
 		</p>
-		<p>All the rest of the Twitter Feed options are set in the <a href="<?php echo get_admin_url(); ?>admin.php?page=dt_setting">Simple Twitter Settings</a> :)</p>
+		<p><?php _e('All the rest of the Twitter Feed options are set in the ','dt_twitter'); ?><a href="<?php echo get_admin_url(); ?>admin.php?page=dt_setting"><?php _e('Simple Twitter Settings','dt_twitter'); ?></a> :)</p>
 		<?php
 	
 	//End Create Widget Form	

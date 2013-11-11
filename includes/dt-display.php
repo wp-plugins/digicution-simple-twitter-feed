@@ -375,8 +375,14 @@ function dt_twitter_display($tweetNoOverride=NULL) {
 		//Get Main Container Options
 		$dt_twitter_display_mcwidth=get_option('dt_twitter_display_mcwidth');
 		$dt_twitter_display_mcwidth_unit=get_option('dt_twitter_display_mcwidth_unit');
-		$dt_twitter_display_mcpadding=get_option('dt_twitter_display_mcpadding');
-		$dt_twitter_display_mcpadding_unit=get_option('dt_twitter_display_mcpadding_unit');
+		$dt_twitter_display_mcpaddingtop=get_option('dt_twitter_display_mcpaddingtop');
+		$dt_twitter_display_mcpaddingtop_unit=get_option('dt_twitter_display_mcpaddingtop_unit');
+		$dt_twitter_display_mcpaddingbottom=get_option('dt_twitter_display_mcpaddingbottom');
+		$dt_twitter_display_mcpaddingbottom_unit=get_option('dt_twitter_display_mcpaddingbottom_unit');
+		$dt_twitter_display_mcpaddingleft=get_option('dt_twitter_display_mcpaddingleft');
+		$dt_twitter_display_mcpaddingleft_unit=get_option('dt_twitter_display_mcpaddingleft_unit');
+		$dt_twitter_display_mcpaddingright=get_option('dt_twitter_display_mcpaddingright');
+		$dt_twitter_display_mcpaddingright_unit=get_option('dt_twitter_display_mcpaddingright_unit');
 		$dt_twitter_display_mcmargintop=get_option('dt_twitter_display_mcmargintop');
 		$dt_twitter_display_mcmargintop_unit=get_option('dt_twitter_display_mcmargintop_unit');
 		$dt_twitter_display_mcmarginbottom=get_option('dt_twitter_display_mcmarginbottom');
@@ -387,16 +393,22 @@ function dt_twitter_display($tweetNoOverride=NULL) {
 		$dt_twitter_display_mcmarginright_unit=get_option('dt_twitter_display_mcmarginright_unit');
 		$dt_twitter_display_mcbg=get_option('dt_twitter_display_mcbg');
 		$dt_twitter_display_mcbg_enabled=get_option('dt_twitter_display_mcbg_enabled');
-		
+		$dt_twitter_display_mcbradius=get_option('dt_twitter_display_mcbradius');
+		$dt_twitter_display_mcbradius_unit=get_option('dt_twitter_display_mcbradius_unit');
+
 		//Create Our CSS Container Style
 		$style=' style="width:'.$dt_twitter_display_mcwidth;
 		if ($dt_twitter_display_mcwidth_unit==1) { $style.='px;'; } else { $style.='%;'; }
-		if ($dt_twitter_display_mcpadding) { $style.='padding:'.$dt_twitter_display_mcpadding; if($dt_twitter_display_mcpadding_unit==1) { $style.='px;'; } else { $style.='%;'; } }
+		if ($dt_twitter_display_mcpaddingtop) { $style.='padding-top:'.$dt_twitter_display_mcpaddingtop; if($dt_twitter_display_mcpaddingtop_unit==1) { $style.='px;'; } else { $style.='%;'; } }
+		if ($dt_twitter_display_mcpaddingbottom) { $style.='padding-bottom:'.$dt_twitter_display_mcpaddingbottom; if($dt_twitter_display_mcpaddingbottom_unit==1) { $style.='px;'; } else { $style.='%;'; } }
+		if ($dt_twitter_display_mcpaddingleft) { $style.='padding-left:'.$dt_twitter_display_mcpaddingleft; if($dt_twitter_display_mcpaddingleft_unit==1) { $style.='px;'; } else { $style.='%;'; } }
+		if ($dt_twitter_display_mcpaddingright) { $style.='padding-right:'.$dt_twitter_display_mcpaddingright; if($dt_twitter_display_mcpaddingright_unit==1) { $style.='px;'; } else { $style.='%;'; } }
 		if ($dt_twitter_display_mcmargintop) { $style.='margin-top:'.$dt_twitter_display_mcmargintop; if($dt_twitter_display_mcmargintop_unit==1) { $style.='px;'; } else { $style.='%;'; } }
 		if ($dt_twitter_display_mcmarginbottom) { $style.='margin-bottom:'.$dt_twitter_display_mcmarginbottom; if($dt_twitter_display_mcmarginbottom_unit==1) { $style.='px;'; } else { $style.='%;'; } }
 		if ($dt_twitter_display_mcmarginleft) { $style.='margin-left:'.$dt_twitter_display_mcmarginleft; if($dt_twitter_display_mcmarginleft_unit==1) { $style.='px;'; } else { $style.='%;'; } }
 		if ($dt_twitter_display_mcmarginright) { $style.='margin-right:'.$dt_twitter_display_mcmarginright; if($dt_twitter_display_mcmarginright_unit==1) { $style.='px;'; } else { $style.='%;'; } }
 		if ($dt_twitter_display_mcbg_enabled==1) { $style.='background-color:'.$dt_twitter_display_mcbg.';'; }
+		if ($dt_twitter_display_mcbradius) { if($dt_twitter_display_mcbradius_unit==1) { $radunit='px'; } else { $radunit='%'; } $style.='-moz-border-radius:'.$dt_twitter_display_mcbradius.$radunit.';-webkit-border-radius:'.$dt_twitter_display_mcbradius.$radunit.';-khtml-border-radius:'.$dt_twitter_display_mcbradius.$radunit.';border-radius:'.$dt_twitter_display_mcbradius.$radunit.';'; }
 		$style.='"';
 
 	//End If Automatic Styling Set To Yes
@@ -465,18 +477,21 @@ function dt_twitter_display($tweetNoOverride=NULL) {
 		$dt_twitter_display_tweetpaddingleft_unit=get_option('dt_twitter_display_tweetpaddingleft_unit');
 		$dt_twitter_display_tweetpaddingright=get_option('dt_twitter_display_tweetpaddingright');
 		$dt_twitter_display_tweetpaddingright_unit=get_option('dt_twitter_display_tweetpaddingright_unit');
-
+		$dt_twitter_display_tweetbradius=get_option('dt_twitter_display_tweetbradius');
+		$dt_twitter_display_tweetbradius_unit=get_option('dt_twitter_display_tweetbradius_unit');
+		
 		//Create Our Tweet CSS Style
 		if ($dt_twitter_display_tweetbg_enabled==1) { $listyle='background:'.$dt_twitter_display_tweetbg.';'; } 
 		if ($dt_twitter_display_tweetbgalt_enabled==1) { $lialtstyle='background:'.$dt_twitter_display_tweetbgalt.';'; } else { $lialtstyle=$listyle; }
-		if ($dt_twitter_display_tweetmargintop) { if ($dt_twitter_display_tweetmargintop_unit==1) { $dtpu.='px'; } else { $dtpu.='%'; } $listyle.='margin-top:'.$dt_twitter_display_tweetmargintop.$dtpu.';'; $lialtstyle.='margin-top:'.$dt_twitter_display_tweetmargintop.$dtpu.';'; } 
-		if ($dt_twitter_display_tweetmarginbottom) { if ($dt_twitter_display_tweetmarginbottom_unit==1) { $dtpu.='px'; } else { $dtpu.='%'; } $listyle.='margin-bottom:'.$dt_twitter_display_tweetmarginbottom.$dtpu.';'; $lialtstyle.='margin-bottom:'.$dt_twitter_display_tweetmarginbottom.$dtpu.';'; } 
-		if ($dt_twitter_display_tweetmarginleft) { if ($dt_twitter_display_tweetmarginleft_unit==1) { $dtpu.='px'; } else { $dtpu.='%'; } $listyle.='margin-left:'.$dt_twitter_display_tweetmarginleft.$dtpu.';'; $lialtstyle.='margin-left:'.$dt_twitter_display_tweetmarginleft.$dtpu.';'; } 
-		if ($dt_twitter_display_tweetmarginright) { if ($dt_twitter_display_tweetmarginright_unit==1) { $dtpu.='px'; } else { $dtpu.='%'; } $listyle.='margin-right:'.$dt_twitter_display_tweetmarginright.$dtpu.';'; $lialtstyle.='margin-right:'.$dt_twitter_display_tweetmarginright.$dtpu.';'; } 		
-		if ($dt_twitter_display_tweetpaddingtop) { if ($dt_twitter_display_tweetpaddingtop_unit==1) { $dtpu.='px'; } else { $dtpu.='%'; } $listyle.='padding-top:'.$dt_twitter_display_tweetpaddingtop.$dtpu.';'; $lialtstyle.='padding-top:'.$dt_twitter_display_tweetpaddingtop.$dtpu.';'; } 
-		if ($dt_twitter_display_tweetpaddingbottom) { if ($dt_twitter_display_tweetpaddingbottom_unit==1) { $dtpu.='px'; } else { $dtpu.='%'; } $listyle.='padding-bottom:'.$dt_twitter_display_tweetpaddingbottom.$dtpu.';'; $lialtstyle.='padding-bottom:'.$dt_twitter_display_tweetpaddingbottom.$dtpu.';'; } 
-		if ($dt_twitter_display_tweetpaddingleft) { if ($dt_twitter_display_tweetpaddingleft_unit==1) { $dtpu.='px'; } else { $dtpu.='%'; } $listyle.='padding-left:'.$dt_twitter_display_tweetpaddingleft.$dtpu.';'; $lialtstyle.='padding-left:'.$dt_twitter_display_tweetpaddingleft.$dtpu.';'; } 
-		if ($dt_twitter_display_tweetpaddingright) { if ($dt_twitter_display_tweetpaddingright_unit==1) { $dtpu.='px'; } else { $dtpu.='%'; } $listyle.='padding-right:'.$dt_twitter_display_tweetpaddingright.$dtpu.';'; $lialtstyle.='padding-right:'.$dt_twitter_display_tweetpaddingright.$dtpu.';'; } 
+		if ($dt_twitter_display_tweetmargintop) { if ($dt_twitter_display_tweetmargintop_unit==1) { $dtpu='px'; } else { $dtpu='%'; } $listyle.='margin-top:'.$dt_twitter_display_tweetmargintop.$dtpu.';'; $lialtstyle.='margin-top:'.$dt_twitter_display_tweetmargintop.$dtpu.';'; } 
+		if ($dt_twitter_display_tweetmarginbottom) { if ($dt_twitter_display_tweetmarginbottom_unit==1) { $dtpu='px'; } else { $dtpu='%'; } $listyle.='margin-bottom:'.$dt_twitter_display_tweetmarginbottom.$dtpu.';'; $lialtstyle.='margin-bottom:'.$dt_twitter_display_tweetmarginbottom.$dtpu.';'; } 
+		if ($dt_twitter_display_tweetmarginleft) { if ($dt_twitter_display_tweetmarginleft_unit==1) { $dtpu='px'; } else { $dtpu='%'; } $listyle.='margin-left:'.$dt_twitter_display_tweetmarginleft.$dtpu.';'; $lialtstyle.='margin-left:'.$dt_twitter_display_tweetmarginleft.$dtpu.';'; } 
+		if ($dt_twitter_display_tweetmarginright) { if ($dt_twitter_display_tweetmarginright_unit==1) { $dtpu='px'; } else { $dtpu='%'; } $listyle.='margin-right:'.$dt_twitter_display_tweetmarginright.$dtpu.';'; $lialtstyle.='margin-right:'.$dt_twitter_display_tweetmarginright.$dtpu.';'; } 		
+		if ($dt_twitter_display_tweetpaddingtop) { if ($dt_twitter_display_tweetpaddingtop_unit==1) { $dtpu='px'; } else { $dtpu='%'; } $listyle.='padding-top:'.$dt_twitter_display_tweetpaddingtop.$dtpu.';'; $lialtstyle.='padding-top:'.$dt_twitter_display_tweetpaddingtop.$dtpu.';'; } 
+		if ($dt_twitter_display_tweetpaddingbottom) { if ($dt_twitter_display_tweetpaddingbottom_unit==1) { $dtpu='px'; } else { $dtpu='%'; } $listyle.='padding-bottom:'.$dt_twitter_display_tweetpaddingbottom.$dtpu.';'; $lialtstyle.='padding-bottom:'.$dt_twitter_display_tweetpaddingbottom.$dtpu.';'; } 
+		if ($dt_twitter_display_tweetpaddingleft) { if ($dt_twitter_display_tweetpaddingleft_unit==1) { $dtpu='px'; } else { $dtpu='%'; } $listyle.='padding-left:'.$dt_twitter_display_tweetpaddingleft.$dtpu.';'; $lialtstyle.='padding-left:'.$dt_twitter_display_tweetpaddingleft.$dtpu.';'; } 
+		if ($dt_twitter_display_tweetpaddingright) { if ($dt_twitter_display_tweetpaddingright_unit==1) { $dtpu='px'; } else { $dtpu='%'; } $listyle.='padding-right:'.$dt_twitter_display_tweetpaddingright.$dtpu.';'; $lialtstyle.='padding-right:'.$dt_twitter_display_tweetpaddingright.$dtpu.';'; } 
+		if ($dt_twitter_display_tweetbradius) { if ($dt_twitter_display_tweetbradius_unit==1) { $dtpu='px'; } else { $dtpu='%'; } $listyle.='-moz-border-radius:'.$dt_twitter_display_tweetbradius.$dtpu.';-webkit-border-radius:'.$dt_twitter_display_tweetbradius.$dtpu.';-khtml-border-radius:'.$dt_twitter_display_tweetbradius.$dtpu.';border-radius:'.$dt_twitter_display_tweetbradius.$dtpu.';'; $lialtstyle.='-moz-border-radius:'.$dt_twitter_display_tweetbradius.$dtpu.';-webkit-border-radius:'.$dt_twitter_display_tweetbradius.$dtpu.';-khtml-border-radius:'.$dt_twitter_display_tweetbradius.$dtpu.';border-radius:'.$dt_twitter_display_tweetbradius.$dtpu.';'; } 
 
 	//End If Automatic Styling Set To Yes
 	}
@@ -528,6 +543,8 @@ function dt_twitter_display($tweetNoOverride=NULL) {
 			$dt_twitter_image_marginright_unit=get_option('dt_twitter_image_marginright_unit');
 			$dt_twitter_image_marginbottom=get_option('dt_twitter_image_marginbottom');
 			$dt_twitter_image_marginbottom_unit=get_option('dt_twitter_image_marginbottom_unit');
+			$dt_twitter_image_bradius=get_option('dt_twitter_image_bradius');
+			$dt_twitter_image_bradius_unit=get_option('dt_twitter_image_bradius_unit');
 
 			//If Automatic Styling Is Set To Yes
 			if($dtauto==1) {
@@ -539,8 +556,11 @@ function dt_twitter_display($tweetNoOverride=NULL) {
 				//Get Our Image Size
 				$imgsize=$dt_twitter_image_size.'px';
 				
+				//Get Our Image Border Radius
+				$imgradius=$dt_twitter_image_bradius; if($dt_twitter_image_bradius_unit==1) { $imgradius.='px'; } else { $imgradius.='%'; }
+				
 				//Display User Image
-				echo '<a target="_blank" class="dt-twitter-avatar-link" style="float:left;" href="http://twitter.com/'.$req_screenname.'"><img src="'.$req_profileimage.'" class="dt-twitter-avatar" alt="'.$req_profileimage.' avatar" title="'.$req_profileimage.' avatar" style="float:left;margin-right:'.$imgmarginright.';margin-bottom:'.$imgmarginbottom.';width:'.$imgsize.';height:'.$imgsize.';" /></a>';
+				echo '<a target="_blank" class="dt-twitter-avatar-link" style="float:left;" href="http://twitter.com/'.$req_screenname.'"><img src="'.$req_profileimage.'" class="dt-twitter-avatar" alt="'.$req_profileimage.' avatar" title="'.$req_profileimage.' avatar" style="float:left;margin-right:'.$imgmarginright.';margin-bottom:'.$imgmarginbottom.';width:'.$imgsize.';height:'.$imgsize.';-moz-border-radius:'.$imgradius.';-webkit-border-radius:'.$imgradius.';-khtml-border-radius:'.$imgradius.';border-radius:'.$imgradius.';" /></a>';
 				
 			//Otherwise - Write Out Standard For Manual Styling
 			} else {

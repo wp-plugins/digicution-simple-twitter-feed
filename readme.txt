@@ -4,7 +4,7 @@ Donate link: http://www.digicution.com/
 Tags: twitter,feed,tweet,simple,list,display,digicution
 Requires at least: 3.1
 Tested up to: 3.7.1
-Stable tag: 1.0
+Stable tag: 1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -91,8 +91,17 @@ No problemo, just head to http://www.digicution.com/contact/ and submit the cont
 = 1.0 =
 * First version of the plugin.
 
+= 1.1 =
+* Added Universal Language Support
+* Added Support For Twitter Profile Image Border Radius
+* Added Support For Main Container Border Radius
+* Added Support For Tweet Container Border Radius
+* Fixed Manual CSS Template URL
+* Fixed Non Updating Margin & Padding Measurement Units For Single Tweet
+* Fixed Styling Multi-Unit Bug
+* Changed Container Padding Settings To Make Styling Easier (& Universal)
 
 == Upgrade Notice ==
 
-= 1.0 =
-Make sure you upgrade to 1.0 in order to be able to use the plugin :)
+= 1.1 =
+Upgrade For Bugfixes, Added Border Radius Support On Twitter Profile Images & Universal Language Support
