@@ -88,9 +88,6 @@ No problemo, just head to http://www.digicution.com/contact/ and submit the cont
 
 == Changelog ==
 
-= 1.0 =
-* First version of the plugin.
-
 = 1.1 =
 * Added Universal Language Support
 * Added Support For Twitter Profile Image Border Radius
@@ -100,6 +97,9 @@ No problemo, just head to http://www.digicution.com/contact/ and submit the cont
 * Fixed Non Updating Margin & Padding Measurement Units For Single Tweet
 * Fixed Styling Multi-Unit Bug
 * Changed Container Padding Settings To Make Styling Easier (& Universal)
+
+= 1.0 =
+* First version of the plugin.
 
 == Upgrade Notice ==
 
