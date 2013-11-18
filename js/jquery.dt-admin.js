@@ -5,7 +5,7 @@
 //Define No Conflict dtjq Variable
 dtjq = jQuery.noConflict();
 
-//On Load - Fire The B&L Advertiser dtjq Functions
+//On Load - Fire The Digicution Twitter dtjq Functions
 dtjq(document).ready(function() { 
 		
 		
@@ -73,69 +73,49 @@ dtjq(document).ready(function() {
 	
 	
 		
-	//Get Viewport Width
-	var viewportWidth=dtjq(window).width();
 	
-	//Define Resizable Header Divs
-	var head=dtjq('h2.dt_header');
-	var bug=dtjq('.request');
-
-	//If Width Less Than 985px
-	if (viewportWidth < 985) {
+	//Resize Header Function
+	function dt_header_resize() {
 		
-		//Change Header Size
-		head.css({ 'height' : '65px' });
-		
-		//Refloat Feature Request Div
-		bug.css({ 'float' : 'none' });
-	
-	//Otherwise - Write Original CSS	
-	} else {
-		
-		//Change Header Size
-		head.css({ 'height' : '35px' });
-		
-		//Refloat Feature Request Div
-		bug.css({ 'float' : 'right', 'display' : 'inline-block' });
-		
-	//End Width If	
-	}
-	
-		
-	//On Window Resize
-	dtjq(window).resize(function() {
-	
 		//Get Viewport Width
 		var viewportWidth=dtjq(window).width();
 		
 		//Define Resizable Header Divs
 		var head=dtjq('h2.dt_header');
 		var bug=dtjq('.request');
-
+	
 		//If Width Less Than 985px
 		if (viewportWidth < 985) {
 			
 			//Change Header Size
-			head.css({ 'height' : '65px' });
+			head.css('height','65px');
 			
 			//Refloat Feature Request Div
-			bug.css({ 'float' : 'none' });
+			bug.css('float','none');
 		
 		//Otherwise - Write Original CSS	
 		} else {
 			
 			//Change Header Size
-			head.css({ 'height' : '35px' });
+			head.css('height','35px');
 			
 			//Refloat Feature Request Div
-			bug.css({ 'float' : 'right', 'display' : 'inline-block' });
+			bug.css('float','right');
+			bug.css('display','inline-block');
 			
 		//End Width If	
 		}
 	
-	//End On Resize Action Function
-	});	
-		
+	//End Resize Header Function
+	}
+	
+	
+	//Run Header Resize On Load
+	dt_header_resize();
+
+	//On Window Resize (Reverted To Stock JS As jQuery Conflicts With WooCommerce)
+	window.onresize = function() { dt_header_resize(); }
+	
 	
 	//Only Allow Numeric Input Function	
 	dtjq('.numberinput').keydown(function(event) {

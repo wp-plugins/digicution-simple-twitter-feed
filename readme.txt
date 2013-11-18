@@ -4,7 +4,7 @@ Donate link: http://www.digicution.com/
 Tags: twitter,feed,tweet,simple,list,display,digicution
 Requires at least: 3.1
 Tested up to: 3.7.1
-Stable tag: 1.1
+Stable tag: 1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -88,6 +88,9 @@ No problemo, just head to http://www.digicution.com/contact/ and submit the cont
 
 == Changelog ==
 
+= 1.2 =
+* Fixed JS Bug In admin.js
+
 = 1.1 =
 * Added Universal Language Support
 * Added Support For Twitter Profile Image Border Radius
@@ -102,6 +105,9 @@ No problemo, just head to http://www.digicution.com/contact/ and submit the cont
 * First version of the plugin.
 
 == Upgrade Notice ==
+
+= 1.2 =
+Upgrade For JS Fix
 
 = 1.1 =
 Upgrade For Bugfixes, Added Border Radius Support On Twitter Profile Images & Universal Language Support
