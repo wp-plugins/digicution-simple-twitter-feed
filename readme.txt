@@ -3,8 +3,8 @@ Contributors: digicution
 Donate link: http://www.digicution.com/
 Tags: twitter,feed,tweet,simple,list,display,digicution
 Requires at least: 3.1
-Tested up to: 3.7.1
-Stable tag: 1.2
+Tested up to: 3.8
+Stable tag: 1.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,6 +12,8 @@ This plugin provides a simple list of Tweets from a users screen name for usage 
 
 
 == Description ==
+
+* Brand New Wordpress 3.8 Responsive Interface Design - Fully Backwards Compatible With Earlier Wordpress Releases.
 
 This plugin provides a simple list of Tweets from a users screen name for usage within your Wordpress Blog or Template.  
 
@@ -57,12 +59,13 @@ PHP's mcrypt library is also recommended but not essential.
 2. Activate the plugin through the 'Plugins' menu in WordPress
 3. Create your Twitter Application at https://dev.twitter.com/ and create a set of API Keys for your application.
 4. Add the Access Token, Access Token Secret, Consumer Key & Consumer Secret to Main Page of 'Simple Twitter' Options Page
-5. Configure display options in 'Simple Twitter' Options Page
-6. Implement the plugin using either Widget, Shortcode or PHP Function method :
-6a. Drag & Drop Widget - If your current theme has widget areas available, you can head to Appearance -> Widgets and simply Drag the "Digicution Twitter" widget into the widget area where you want your tweets to appear.
-6b. Use The Shortcode - You can drop the Twitter Widget into any standard Wordpress Post or Page simply by pasting the shortcode below into the content section of the post/page: [dt_twitter]
-6c. Drop The Function In Manually - Or, for the more versed in theme customisation, you can simply drop the PHP function directly into your theme files where you want the Twitter Feed to appear. To do this, simply copy and paste the code below into your theme where you want the Feed to appear: `<?php dt_twitter(); ?>`
-7. Congrats, You've just added the Twitter Feed to your website :)
+5. Ensure you change the Twitter Username value from 'digicution' to your Twitter Username to display your Tweets!
+6. Configure display options in 'Simple Twitter' Options Page
+7. Implement the plugin using either Widget, Shortcode or PHP Function method :
+7a. Drag & Drop Widget - If your current theme has widget areas available, you can head to Appearance -> Widgets and simply Drag the "Digicution Twitter" widget into the widget area where you want your tweets to appear.
+7b. Use The Shortcode - You can drop the Twitter Widget into any standard Wordpress Post or Page simply by pasting the shortcode below into the content section of the post/page: [dt_twitter]
+7c. Drop The Function In Manually - Or, for the more versed in theme customisation, you can simply drop the PHP function directly into your theme files where you want the Twitter Feed to appear. To do this, simply copy and paste the code below into your theme where you want the Feed to appear: `<?php dt_twitter(); ?>`
+8. Congrats, You've just added the Twitter Feed to your website :)
 
 
 == Frequently Asked Questions ==
@@ -71,6 +74,10 @@ PHP's mcrypt library is also recommended but not essential.
 
 OK, Double check... No, triple check that you have the correct Access Token, Access Token Secret, Consumer Key & Consumer Secret from your Twitter App entered correctly in the main app setup screen.  If you're sure you've done this and you're still hvaing issues, please drop me an email via http://www.digicution.com/contact and I'll get back to you asap.
 
+= My Tweets are showing but they aren't mine?  Eh? =
+
+Please make sure that you have added YOUR Twitter Username into the Twitter Username option on the General Settings page.
+
 = I have a question, bug or feature request...  Where can I submit it? =
 
 No problemo, just head to http://www.digicution.com/contact/ and submit the contact form with your question/bug/request - I'll get back to you as soon as I possibly can :)
@@ -78,8 +85,8 @@ No problemo, just head to http://www.digicution.com/contact/ and submit the cont
 
 == Screenshots ==
 
-1. General Settings Menu
-2. Tweet Appearance Menu
+1. Tweet Appearance Menu (New Layout)
+2. General Settings Menu (Mobile Layout Example)
 3. Widget Appearance
 4. Example 1
 5. Example 2
@@ -87,6 +94,14 @@ No problemo, just head to http://www.digicution.com/contact/ and submit the cont
 
 
 == Changelog ==
+
+= 1.3 =
+* Added SVG Menu & Header Icons For Wordpress 3.8 Support
+* Added Responsive Design For Easy Use On Mobile / Tablet
+* Changed Interface Design For Backend To Work Smoother With Responsive & Wordpress 3.8 Design
+* Fixed Random Character Bug on Main Page
+* Added Version Checking For Menu Icons (Backwards Compatibility)
+* Added Extra Description's On Option Page Headers To Assist Users As To What Each Page Does (Request)
 
 = 1.2 =
 * Fixed JS Bug In admin.js
@@ -104,7 +119,11 @@ No problemo, just head to http://www.digicution.com/contact/ and submit the cont
 = 1.0 =
 * First version of the plugin.
 
+
 == Upgrade Notice ==
+
+= 1.3 =
+Upgrade For Wordpress 3.8 & Mobile Device Support With A Shiny New Interface :)
 
 = 1.2 =
 Upgrade For JS Fix

@@ -19,7 +19,7 @@ dtjq(document).ready(function() {
 	dtjq('INPUT[type=minicolors]').each( function() {
 	
 		//If Disabled - Add No BG Value
-		if (dtjq(this).is(':disabled')) { dtjq(this).val('No Background Colour'); }
+		if (dtjq(this).is(':disabled')) { dtjq(this).val('None'); }
 		
 	//End Disabled Input Values Function
 	});
@@ -59,7 +59,7 @@ dtjq(document).ready(function() {
 			});
 
 			//Tell User We Have No BG Color Selected
-			dtjq(hitme).val('No Background Colour');
+			dtjq(hitme).val('None');
 			
 			//Re-Initialise MiniColors Plugin To Update
 			dtjq.minicolors.init(); 
@@ -73,9 +73,9 @@ dtjq(document).ready(function() {
 	
 	
 		
-	
+	//REMOVED - Using CSS Media Queries To Handle
 	//Resize Header Function
-	function dt_header_resize() {
+	/*function dt_header_resize() {
 		
 		//Get Viewport Width
 		var viewportWidth=dtjq(window).width();
@@ -107,14 +107,16 @@ dtjq(document).ready(function() {
 		}
 	
 	//End Resize Header Function
-	}
+	}*/
 	
 	
 	//Run Header Resize On Load
-	dt_header_resize();
+	//dt_header_resize();
 
 	//On Window Resize (Reverted To Stock JS As jQuery Conflicts With WooCommerce)
-	window.onresize = function() { dt_header_resize(); }
+	//window.onresize = function() { dt_header_resize(); }
+	
+	
 	
 	
 	//Only Allow Numeric Input Function	

@@ -1,6 +1,6 @@
 <?php /**
 Plugin Name: Digicution Simple Twitter Feed
-Version: 1.2
+Version: 1.3
 Plugin URI: http://www.digicution.com/wordpress-simple-twitter-feed/
 Description: This plugin provides a simple list of Tweets from a users screen name for usage within your Wordpress Blog or Template
 Author: Dan Perkins @ Digicution
@@ -36,6 +36,9 @@ include_once(DT_DIR.'includes/dt-display.php');
 //First Things First, Let's Create Our Wordpress Administrative Menu...
 function dt_menu() {
 	
+	//Define Globals
+	global $wp_version;
+
 	//Define Our CSS File For The Admin Pages
    	wp_register_style($handle = 'dt_admin',$src = plugins_url('css/admin.css', __FILE__),$deps = array(),$ver = '1.0.0',$media = 'all');
    	wp_register_style($handle = 'dt_colors',$src = plugins_url('js/minicolors/jquery.miniColors.css', __FILE__),$deps = array(),$ver = '1.0.0',$media = 'all');
@@ -51,9 +54,22 @@ function dt_menu() {
 	wp_enqueue_script('dt-admin-js',plugins_url('js/jquery.dt-admin.js', __FILE__)); 
 	wp_enqueue_script('dt-color-js',plugins_url('js/minicolors/jquery.miniColors.js', __FILE__));
 	 
-    //Create Our Main Menu Page
-	add_menu_page("Simple Twitter", "Simple Twitter", "administrator", "dt_setting" , "dt_admin", WP_PLUGIN_URL.DT_SUBDIR."/images/wp-icon.png");
+    //If Lower Than WP 3.8
+    if (version_compare($wp_version,"3.8","<")) { 
+    	
+    	//Create Menu Page With Old PNG Menu Icon
+		add_menu_page("Simple Twitter", "Simple Twitter", "administrator", "dt_setting" , "dt_admin", WP_PLUGIN_URL.DT_SUBDIR."/images/wp-icon.png");
+	
+	//Otherwise, Use New Fangled SVGizzle	
+	} else {
 		
+		//Create Menu Page With New SVG WP 3.8 Menu Icon
+		add_menu_page("Simple Twitter", "Simple Twitter", "administrator", "dt_setting" , "dt_admin", "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+Cjxzdmcgd2lkdGg9Ijg2NHB4IiBoZWlnaHQ9IjkyN3B4IiB2aWV3Qm94PSIwIDAgODY0IDkyNyIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4bWxuczpza2V0Y2g9Imh0dHA6Ly93d3cuYm9oZW1pYW5jb2RpbmcuY29tL3NrZXRjaC9ucyI+CiAgICA8dGl0bGU+U2ltcGxlIFR3aXR0ZXIgTG9nbzwvdGl0bGU+CiAgICA8ZGVzY3JpcHRpb24+Q3JlYXRlZCB3aXRoIFNrZXRjaCAoaHR0cDovL3d3dy5ib2hlbWlhbmNvZGluZy5jb20vc2tldGNoKTwvZGVzY3JpcHRpb24+CiAgICA8ZGVmcz48L2RlZnM+CiAgICA8ZyBpZD0iUGFnZS0xIiBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIiBza2V0Y2g6dHlwZT0iTVNQYWdlIj4KICAgICAgICA8cGF0aCBkPSJNNDMyLDkyNyBDNjcwLjU4NzAyNCw5MjcgODY0LDczMy41ODcwMjQgODY0LDQ5NSBDODY0LDI1Ni40MTI5NzYgNjcwLjU4NzAyNCw2MyA0MzIsNjMgQzE5My40MTI5NzYsNjMgMCwyNTYuNDEyOTc2IDAsNDk1IEMwLDczMy41ODcwMjQgMTkzLjQxMjk3Niw5MjcgNDMyLDkyNyBaIE03NTksMjkxLjk3NTI0OSBDNzM0Ljg2NTY5OCwzMDIuNjU4NzcxIDcwOC45MjQxNDMsMzA5Ljg3NjA0NyA2ODEuNzAzMzcyLDMxMy4xMjMwMSBDNzA5LjQ4ODMyNCwyOTYuNTAxOTU4IDczMC44MzEyOTEsMjcwLjE4MjY1MyA3NDAuODc3OTQ5LDIzOC44MTk0NDIgQzcxNC44NzA3OTcsMjU0LjIxMzAwMSA2ODYuMDY5MDU4LDI2NS4zODc0OTggNjU1LjQxMDg3OCwyNzEuNDEwMTA3IEM2MzAuODYzMjksMjQ1LjMwNjgwMyA1OTUuODg1MzIzLDIyOSA1NTcuMTc0NzAxLDIyOSBDNDgyLjg0OTc5MywyMjkgNDIyLjU4NjI1MiwyODkuMTMwODYgNDIyLjU4NjI1MiwzNjMuMzAwMjYyIEM0MjIuNTg2MjUyLDM3My44MjY2NzkgNDIzLjc3Njg4MywzODQuMDc4MTYxIDQyNi4wNzI4ODgsMzkzLjkwNzQxMiBDMzE0LjIxODEyLDM4OC4zMDcwNzIgMjE1LjA1MDQ1MiwzMzQuODM3MDE1IDE0OC42Njk3MDMsMjUzLjU4MTI5NiBDMTM3LjA4NDcyNSwyNzMuNDE2NTI0IDEzMC40NDU5ODUsMjk2LjQ4NTYyMiAxMzAuNDQ1OTg1LDMyMS4wOTk2NjggQzEzMC40NDU5ODUsMzY3LjY5NjA4OCAxNTQuMjA2MzYsNDA4LjgwMzQ3MSAxOTAuMzE5MTg5LDQzMi44ODcyMjggQzE2OC4yNTc4OTYsNDMyLjE5MDA2MyAxNDcuNTA1MzExLDQyNi4xNDc4MzUgMTI5LjM2MDMxLDQxNi4wODk0OSBDMTI5LjM0NTAxLDQxNi42NDkxNjkgMTI5LjM0NTAxLDQxNy4yMTIxMzEgMTI5LjM0NTAxLDQxNy43Nzg0MTMgQzEyOS4zNDUwMSw0ODIuODQ4NDggMTc1LjczNzQzOCw1MzcuMTI2OTY2IDIzNy4zMDYzOTcsNTQ5LjQ3MzI2NSBDMjI2LjAxMzM0LDU1Mi41NDM0NjUgMjE0LjEyMzMyMiw1NTQuMTgzMzAyIDIwMS44NDk1MDgsNTU0LjE4MzMwMiBDMTkzLjE3NzE5NCw1NTQuMTgzMzAyIDE4NC43NDc2MTEsNTUzLjMzODg0MSAxNzYuNTI3OTAyLDU1MS43NzQyNzQgQzE5My42NTYwNzgsNjA1LjEyOTc0NiAyNDMuMzU4MDA3LDY0My45NTkwMjEgMzAyLjI1Mzc4Myw2NDUuMDM5MTQxIEMyNTYuMTkyNjczLDY4MS4wNjMzNDIgMTk4LjE2MjgyOCw3MDIuNTM1MTYyIDEzNS4xMDQ3LDcwMi41MzUxNjIgQzEyNC4yNDEzLDcwMi41MzUxNjIgMTEzLjUyODgzMiw3MDEuODk2ODkyIDEwMyw3MDAuNjU2MzQ2IEMxNjIuNTYxNjI0LDczOC43NjU1NTQgMjMzLjMwNDc3LDc2MSAzMDkuMzA5MDYxLDc2MSBDNTU2Ljg2MDkwMiw3NjEgNjkyLjIzNjU2NCw1NTYuMzUzNDI4IDY5Mi4yMzY1NjQsMzc4Ljg3MDU4NSBDNjkyLjIzNjU2NCwzNzMuMDQ3Njc4IDY5Mi4xMDUzNjgsMzY3LjI1NzQ4MyA2OTEuODQ2MjY2LDM2MS40OTM1MSBDNzE4LjEzODc2LDM0Mi41NjE2NCA3NDAuOTU0NDg2LDMxOC45MDk4ODUgNzU4Ljk5NzgyLDI5MS45NzUyNDkgTDc1OSwyOTEuOTc1MjQ5IFoiIGlkPSJPdmFsLTEiIGZpbGw9IiMwMDAwMDAiIHNrZXRjaDp0eXBlPSJNU1NoYXBlR3JvdXAiPjwvcGF0aD4KICAgICAgICA8ZyBpZD0iVHdpdHRlcl9iaXJkX2xvZ29fMjAxMiIgc2tldGNoOnR5cGU9Ik1TTGF5ZXJHcm91cCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTAzLjAwMDAwMCwgMjI5LjAwMDAwMCkiPgogICAgICAgICAgICA8ZyBpZD0ibGF5ZXIxIj48L2c+CiAgICAgICAgPC9nPgogICAgPC9nPgo8L3N2Zz4=");		
+
+	//End If Lower Than WP 3.8	
+	}
+
+//End Wordpress Adminstrative Menu	
 }
 
 //Add Main Menu To Wordpress Admin

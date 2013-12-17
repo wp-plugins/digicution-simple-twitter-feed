@@ -47,8 +47,8 @@
 
 .minicolors-swatch {
 	position: relative;
-	width: 25px;
-	height: 25px;
+	width: 35px;
+	height: 35px;
 	background: url(jquery.minicolors.png) -80px 0;
 	border: solid 1px #CCC;
 	display: inline-block;
@@ -70,8 +70,8 @@
 /* Panel */
 .minicolors-panel {
 	position: absolute;
-	top: 26px;
-	left: 117px;
+	top: 36px;
+	left: 125px;
 	width: 173px;
 	height: 152px;
 	background: white;
