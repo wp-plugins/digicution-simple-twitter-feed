@@ -215,8 +215,19 @@ function dt_twitter_update($tweetNoOverride=NULL) {
 						}
 						
 						//Sort Out Date & Tweet Link
+						$utcoffset=$t->user->utc_offset;
 						$date=strtotime($t->created_at);
-						$date=human_time_diff($date,current_time("timestamp"));
+						$dateutc=intval($date)+intval($utcoffset);
+						
+						//Debug - Date Testing (For UTC Offset)
+						//echo $date.'<br/>';
+						//echo $utcoffset.'<br/>';
+						//echo $dateutc.'<br/>';
+						//echo human_time_diff($date,current_time("timestamp")).'<br/>';
+						//echo human_time_diff($dateutc,current_time("timestamp")).'<br/>';
+						
+						//Create Human Time Difference Date
+						$date=human_time_diff($dateutc,current_time("timestamp"));
 									
 						//Clean Twitter ID
 						$tweetid=mysql_real_escape_string($tweetid);
@@ -599,10 +610,10 @@ function dt_twitter_display($tweetNoOverride=NULL) {
 		if($dtauto==1) {
 	
 			//Get Our Font Styling
-			$fontstyle=''; $fontsize=$dt_twitter_display_fontsize; if($dt_twitter_display_fontsize_unit==1) { $fontstyle=' style="font-size:'.$fontsize.'px;line-height:'.$fontsize.'px;'; if($dt_twitter_display_fontcolor) { $fontstyle.='color:'.$dt_twitter_display_fontcolor.';'; } $fontstyle.='"'; } else { $fontstyle=' style="font-size:'.$fontsize.'%;line-height:'.$fontsize.'%;'; if($dt_twitter_display_fontcolor) { $fontstyle.='color:'.$dt_twitter_display_fontcolor.';'; } $fontstyle.='"'; }
+			$fontstyle=''; $fontsize=$dt_twitter_display_fontsize; if($dt_twitter_display_fontsize_unit==1) { $fontstyle=' style="font-size:'.$fontsize.'px;line-height:'.$fontsize.'px;'; if($dt_twitter_display_fontcolor) { $fontstyle.='color:'.$dt_twitter_display_fontcolor.';'; } $fontstyle.='"'; } else { $fontstyle=' style="font-size:'.$fontsize.'em;line-height:'.$fontsize.'%;'; if($dt_twitter_display_fontcolor) { $fontstyle.='color:'.$dt_twitter_display_fontcolor.';'; } $fontstyle.='"'; }
 			
 			//Get Our Link Styling
-			$linkstyle=''; $fontsize=$dt_twitter_display_fontsize; if($dt_twitter_display_fontsize_unit==1) { $linkstyle='style="font-size:'.$fontsize.'px;line-height:'.$fontsize.'px;'; if($dt_twitter_display_linkcolor) { $linkstyle.='color:'.$dt_twitter_display_linkcolor.';'; } $linkstyle.='"'; } else { $linkstyle='style="font-size:'.$fontsize.'%;line-height:'.$fontsize.'%;'; if($dt_twitter_display_linkcolor) { $linkstyle.='color:'.$dt_twitter_display_linkcolor.';'; } $linkstyle.='"'; }
+			$linkstyle=''; $fontsize=$dt_twitter_display_fontsize; if($dt_twitter_display_fontsize_unit==1) { $linkstyle='style="font-size:'.$fontsize.'px;line-height:'.$fontsize.'px;'; if($dt_twitter_display_linkcolor) { $linkstyle.='color:'.$dt_twitter_display_linkcolor.';'; } $linkstyle.='"'; } else { $linkstyle='style="font-size:'.$fontsize.'em;line-height:'.$fontsize.'%;'; if($dt_twitter_display_linkcolor) { $linkstyle.='color:'.$dt_twitter_display_linkcolor.';'; } $linkstyle.='"'; }
 			
 			//If We Have Tweet Link Color Set
 			if ($dt_twitter_display_linkcolor) { $req_tweet=str_replace('<a','<a style="color:'.$dt_twitter_display_linkcolor.';"',$req_tweet); }
@@ -619,14 +630,40 @@ function dt_twitter_display($tweetNoOverride=NULL) {
 				//Start Container
 				echo '<div class="dt-twitter-end-container">';
 				
-				if ($twitterpexpand==1) { echo '<a '.$linkstyle.' href="http://twitter.com/'.$screenname.'/status/'.$req_tweetid.'" class="dt-twitter-button-expand" rel="external" target="_blank">Expand</a>&nbsp;'; }
 				if ($twitterpreply==1) { echo '<a '.$linkstyle.' href="http://twitter.com/intent/tweet?related='.$screenname.'&in_reply_to='.$req_tweetid.'" class="dt-twitter-button-reply" rel="external" target="_blank">Reply</a>&nbsp;'; }
 				if ($twitterpretweet==1) { echo '<a '.$linkstyle.' href="http://twitter.com/intent/retweet?related='.$screenname.'&tweet_id='.$req_tweetid.'" class="dt-twitter-button-retweet" rel="external" target="_blank">Retweet</a>&nbsp;'; }
 				if ($twitterpfavourite==1) { echo '<a '.$linkstyle.' href="http://twitter.com/intent/favorite?related='.$screenname.'&tweet_id='.$req_tweetid.'" class="dt-twitter-button-favourite" rel="external" target="_blank">Favourite</a>&nbsp;'; }
+				if ($twitterpexpand==1) { echo '<a '.$linkstyle.' href="http://twitter.com/'.$screenname.'/status/'.$req_tweetid.'" class="dt-twitter-button-expand" rel="external" target="_blank">Expand</a>&nbsp;'; }
+
+				//Close Container
+				echo '</div>';
+				
+			//Otherwise, If We Have Icons To Be Displayed	
+			} elseif (($twitterpexpand==2) || ($twitterpreply==2) || ($twitterpretweet==2) || ($twitterpfavourite==2)) {
+				
+				//Add Our Twitter Icon CSS To Wordpress Header		
+				//add_action ('wp_head','twitter_icon_css');
+				
+				//Create Our Icon Style
+				$iconstyle='style="float:left;"';		
+								
+				//Start Container
+				echo '<div class="dt-twitter-end-container">';
+				
+				if ($twitterpreply==2) { echo '<a href="http://twitter.com/intent/tweet?related='.$screenname.'&in_reply_to='.$req_tweetid.'" class="dt-twitter-button-reply" rel="external" target="_blank"><div class="dt-twitter-icon-reply"></div></a>&nbsp;'; }
+				if ($twitterpretweet==2) { echo '<a href="http://twitter.com/intent/retweet?related='.$screenname.'&tweet_id='.$req_tweetid.'" class="dt-twitter-button-retweet" rel="external" target="_blank"><div class="dt-twitter-icon-retweet"></div></a>&nbsp;'; }
+				if ($twitterpfavourite==2) { echo '<a href="http://twitter.com/intent/favorite?related='.$screenname.'&tweet_id='.$req_tweetid.'" class="dt-twitter-button-favourite" rel="external" target="_blank"><div class="dt-twitter-icon-favourite"></div></a>&nbsp;'; }
+				if ($twitterpexpand==2) { echo '<a href="http://twitter.com/'.$screenname.'/status/'.$req_tweetid.'" class="dt-twitter-button-expand" rel="external" target="_blank"><div class="dt-twitter-icon-expand"></div></a>&nbsp;'; }
+	
+				//Clear Floats
+				echo '<div style="clear:both;"></div>';
 	
 				//Close Container
 				echo '</div>';
+				
+			//End If We Have Any Post Options
 			}
+
 
 		//Otherwise - Write Standard Tweet For Manual Styling
 		} else {
@@ -640,21 +677,32 @@ function dt_twitter_display($tweetNoOverride=NULL) {
 				//Start Container
 				echo '<div class="dt-twitter-end-container">';
 				
-				if ($twitterpexpand==1) { echo '<a href="http://twitter.com/'.$screenname.'/status/'.$req_tweetid.'" class="dt-twitter-button-expand" rel="external" target="_blank">Expand</a>'; }
-				if ($twitterpfavourite==1) { echo '<a href="http://twitter.com/intent/favorite?related='.$screenname.'&tweet_id='.$req_tweetid.'" class="dt-twitter-button-favourite" rel="external" target="_blank">Favourite</a>'; }
-				if ($twitterpretweet==1) { echo '<a href="http://twitter.com/intent/retweet?related='.$screenname.'&tweet_id='.$req_tweetid.'" class="dt-twitter-button-retweet" rel="external" target="_blank">Retweet</a>'; }
 				if ($twitterpreply==1) { echo '<a href="http://twitter.com/intent/tweet?related='.$screenname.'&in_reply_to='.$req_tweetid.'" class="dt-twitter-button-reply" rel="external" target="_blank">Reply</a>'; }
-	
-				//If Icons Selected
-				///if ($twitterpfavourite==2) { echo '<a href="http://twitter.com/intent/favorite?related='.$screenname.'&tweet_id='.$req_tweetid.'" class="dt-twitter-button-favourite" rel="external" target="_blank" style="float:right;width:26px;height:26px;text-indent:-9999px;background:url(\''.plugins_url('images/icons.png', __FILE__).'\') top left no-repeat;">Favourite</a>'; }
-				//if ($twitterpretweet==2) { echo '<a href="http://twitter.com/intent/retweet?related='.$screenname.'&tweet_id='.$req_tweetid.'" class="dt-twitter-button-retweet" rel="external" target="_blank" style="float:right;">Retweet</a>'; }
-				//if ($twitterpreply==2) { echo '<a href="http://twitter.com/intent/tweet?related='.$screenname.'&in_reply_to='.$req_tweetid.'" class="dt-twitter-button-reply" rel="external" target="_blank" style="float:right;" >Reply</a>'; }
-
-				//If Icons Selected - Add Clear Floats
-				//if ($twitterpfavourite==2 || $twitterpretweet==2 || $twitterpreply==2) { echo '<div style="clear:both;"></div>'; }
-				
+				if ($twitterpretweet==1) { echo '<a href="http://twitter.com/intent/retweet?related='.$screenname.'&tweet_id='.$req_tweetid.'" class="dt-twitter-button-retweet" rel="external" target="_blank">Retweet</a>'; }
+				if ($twitterpfavourite==1) { echo '<a href="http://twitter.com/intent/favorite?related='.$screenname.'&tweet_id='.$req_tweetid.'" class="dt-twitter-button-favourite" rel="external" target="_blank">Favourite</a>'; }
+				if ($twitterpexpand==1) { echo '<a href="http://twitter.com/'.$screenname.'/status/'.$req_tweetid.'" class="dt-twitter-button-expand" rel="external" target="_blank">Expand</a>'; }
+					
 				//Close Container
 				echo '</div>';
+				
+			//Otherwise, If We Have Icons To Be Displayed	
+			} elseif (($twitterpexpand==2) || ($twitterpreply==2) || ($twitterpretweet==2) || ($twitterpfavourite==2)) {
+														
+				//Start Container
+				echo '<div class="dt-twitter-end-container">';
+				
+				if ($twitterpreply==2) { echo '<a href="http://twitter.com/intent/tweet?related='.$screenname.'&in_reply_to='.$req_tweetid.'" class="dt-twitter-button-reply" rel="external" target="_blank"><div class="dt-twitter-icon-reply"></div></a>&nbsp;'; }
+				if ($twitterpretweet==2) { echo '<a href="http://twitter.com/intent/retweet?related='.$screenname.'&tweet_id='.$req_tweetid.'" class="dt-twitter-button-retweet" rel="external" target="_blank"><div class="dt-twitter-icon-retweet"></div></a>&nbsp;'; }
+				if ($twitterpfavourite==2) { echo '<a href="http://twitter.com/intent/favorite?related='.$screenname.'&tweet_id='.$req_tweetid.'" class="dt-twitter-button-favourite" rel="external" target="_blank"><div class="dt-twitter-icon-favourite"></div></a>&nbsp;'; }
+				if ($twitterpexpand==2) { echo '<a href="http://twitter.com/'.$screenname.'/status/'.$req_tweetid.'" class="dt-twitter-button-expand" rel="external" target="_blank"><div class="dt-twitter-icon-expand"></div></a>&nbsp;'; }
+	
+				//Clear Floats
+				echo '<div style="clear:both;"></div>';
+	
+				//Close Container
+				echo '</div>';
+				
+			//End If We Have Any Post Options
 			}
 
 		//End If Automatic Styling Is Set To Yes
@@ -690,5 +738,60 @@ function dt_convert_urls($text) {
     $text= preg_replace("/(^|[\n ])([\w]*?)((www|ftp)\.[^ \,\"\t\n\r<]*)/is", "$1$2<a href=\"http://$3\" target=\"_blank\">$3</a>", $text);  
     $text= preg_replace("/(^|[\n ])([a-z0-9&\-_\.]+?)@([\w\-]+\.([\w\-\.]+)+)/i", "$1<a href=\"mailto:$2@$3\" target=\"_blank\">$2@$3</a>", $text);  
     return($text);  
-}  							
+} 
+
+
+/////////////////////////////////////////////////////////////
+/////   Digicution Simple Twitter Feed Icon CSS (New)   /////
+/////////////////////////////////////////////////////////////
+
+function twitter_icon_css() {
+	 
+	//Get Twitter Icon Options
+	$dt_twitter_icon_fontsize=get_option('dt_twitter_icon_fontsize');
+	if(get_option('dt_twitter_icon_fontsize_unit')==1) { $dt_twitter_icon_fontsize_unit='px'; } else { $dt_twitter_icon_fontsize_unit='em'; }
+	$dt_twitter_icon_fontcolor=get_option('dt_twitter_icon_fontcolor');
+	$dt_twitter_icon_fontcolor_hover=get_option('dt_twitter_icon_fontcolor_hover');
+	$dt_twitter_icon_margintop=get_option('dt_twitter_icon_margintop');	
+	if(get_option('dt_twitter_icon_margintop_unit')==1) { $dt_twitter_icon_margintop_unit='px'; } else { $dt_twitter_icon_margintop_unit='%'; }
+	$dt_twitter_icon_spacing=get_option('dt_twitter_icon_spacing');	
+	if(get_option('dt_twitter_icon_spacing_unit')==1) { $dt_twitter_icon_spacing_unit='px'; } else { $dt_twitter_icon_spacing_unit='%'; }
+	
+	//Write CSS Out
+	echo '
+	<style type="text/css" media="screen">
+	
+		a.dt-twitter-button-reply div.dt-twitter-icon-reply,
+		a.dt-twitter-button-retweet div.dt-twitter-icon-retweet,
+		a.dt-twitter-button-favourite div.dt-twitter-icon-favourite,
+		a.dt-twitter-button-expand div.dt-twitter-icon-expand
+		{ float:left; text-decoration:none; font-size:'.$dt_twitter_icon_fontsize.$dt_twitter_icon_fontsize_unit.'; color:'.$dt_twitter_icon_fontcolor.'; margin-top:'.$dt_twitter_icon_margintop.$dt_twitter_icon_margintop_unit.'; margin-right:'.$dt_twitter_icon_spacing.$dt_twitter_icon_spacing_unit.'; }
+		
+		a.dt-twitter-button-reply div.dt-twitter-icon-reply:hover,
+		a.dt-twitter-button-retweet div.dt-twitter-icon-retweet:hover,
+		a.dt-twitter-button-favourite div.dt-twitter-icon-favourite:hover,
+		a.dt-twitter-button-expand div.dt-twitter-icon-expand:hover
+		{ color:'.$dt_twitter_icon_fontcolor_hover.'; }
+		
+	</style>
+	
+	';
+	
+//End Icon CSS Function	
+} 
+
+//Grab After Tweet Setttings	
+$twitterpexpand=get_option('dt_twitter_post_expand');	
+$twitterpreply=get_option('dt_twitter_post_reply');	
+$twitterpretweet=get_option('dt_twitter_post_retweet');	
+$twitterpfavourite=get_option('dt_twitter_post_favourite');
+
+//If We Have Any Icons Selected
+if (($twitterpexpand==2) || ($twitterpreply==2) || ($twitterpretweet==2) || ($twitterpfavourite==2)) {
+
+	//Add Our Twitter Icon CSS To Wordpress Header		
+	add_action ('wp_head','twitter_icon_css');	
+
+//End If We Have Any Icons Selected	
+}						
 ?>

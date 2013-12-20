@@ -196,6 +196,14 @@ function dt_admin() {
 		$dt_twitter_image_marginright_unit=$_POST['dt_twitter_image_marginright_unit'];
 		$dt_twitter_image_marginbottom=$_POST['dt_twitter_image_marginbottom'];
 		$dt_twitter_image_marginbottom_unit=$_POST['dt_twitter_image_marginbottom_unit'];
+		$dt_twitter_icon_fontsize=$_POST['dt_twitter_icon_fontsize'];
+		$dt_twitter_icon_fontsize_unit=$_POST['dt_twitter_icon_fontsize_unit'];
+		$dt_twitter_icon_fontcolor=$_POST['dt_twitter_icon_fontcolor'];
+		$dt_twitter_icon_fontcolor_hover=$_POST['dt_twitter_icon_fontcolor_hover'];
+		$dt_twitter_icon_margintop=$_POST['dt_twitter_icon_margintop'];		
+		$dt_twitter_icon_margintop_unit=$_POST['dt_twitter_icon_margintop_unit'];	
+		$dt_twitter_icon_spacing=$_POST['dt_twitter_icon_spacing'];	
+		$dt_twitter_icon_spacing_unit=$_POST['dt_twitter_icon_spacing_unit'];	
 				
 		//Clear General Message Session
 		$_SESSION['display_message']='';
@@ -228,6 +236,8 @@ function dt_admin() {
 		if(!$dt_twitter_image_bradius) { $dt_twitter_image_bradius=0; }
 		if(!$dt_twitter_display_mcbradius) { $dt_twitter_display_mcbradius=0; }
 		if(!$dt_twitter_display_tweetbradius) { $dt_twitter_display_tweetbradius=0; }
+		if(!$dt_twitter_icon_margintop) { $dt_twitter_icon_margintop=0; }
+		if(!$dt_twitter_icon_spacing) { $dt_twitter_icon_spacing=0; }
 
 		//Check Padding / Margin Values Are Numeric - If So, Update Option Or Add Error Message
 		if (!is_numeric($dt_twitter_display_mcpaddingtop)) { $_SESSION['display_message'].="Please Enter A Numeric Value For The Main Container Top Padding<br/>"; } else { update_option('dt_twitter_display_mcpaddingtop',$dt_twitter_display_mcpaddingtop); }
@@ -251,7 +261,12 @@ function dt_admin() {
 		if (!is_numeric($dt_twitter_image_bradius)) { $_SESSION['display_message'].="Please Enter A Numeric Value For The Twitter Image Corner Radius<br/>"; } else { update_option('dt_twitter_image_bradius',$dt_twitter_image_bradius); }
 		if (!is_numeric($dt_twitter_image_marginright)) { $_SESSION['display_message'].="Please Enter A Numeric Value For The Right Image Margin<br/>"; } else { update_option('dt_twitter_image_marginright',$dt_twitter_image_marginright); }
 		if (!is_numeric($dt_twitter_image_marginbottom)) { $_SESSION['display_message'].="Please Enter A Numeric Value For The Bottom Image Margin<br/>"; } else { update_option('dt_twitter_image_marginbottom',$dt_twitter_image_marginbottom); }
-		
+		if (!is_numeric($dt_twitter_icon_margintop)) { $_SESSION['display_message'].="Please Enter A Numeric Value For The Tweet Icon Top Margin<br/>"; } else { update_option('dt_twitter_icon_margintop',$dt_twitter_icon_margintop); }
+		if (!is_numeric($dt_twitter_icon_spacing)) { $_SESSION['display_message'].="Please Enter A Numeric Value For The Tweet Icon Spacing<br/>"; } else { update_option('dt_twitter_icon_spacing',$dt_twitter_icon_spacing); }
+
+		//Update tweet Icon Fontsize Or Display Error
+		if(!$dt_twitter_icon_fontsize) { $_SESSION['display_message'].="Please Enter The Tweet Icon Font Size<br/>"; } elseif (!is_numeric($dt_twitter_icon_fontsize)) { $_SESSION['display_message'].="Please Enter A Numeric Value For The Tweet Icon Font Size<br/>"; } else { update_option('dt_twitter_icon_fontsize',$dt_twitter_icon_fontsize); }
+
 		//Update Other Select Options
 		update_option('dt_twitter_display_auto',$dt_twitter_display_auto);
 		update_option('dt_twitter_display_mcwidth_unit',$dt_twitter_display_mcwidth_unit);
@@ -286,6 +301,11 @@ function dt_admin() {
 		update_option('dt_twitter_display_tweetpaddingleft_unit',$dt_twitter_display_tweetpaddingleft_unit);
 		update_option('dt_twitter_display_tweetpaddingright_unit',$dt_twitter_display_tweetpaddingright_unit);
 		update_option('dt_twitter_display_tweetbradius_unit',$dt_twitter_display_tweetbradius_unit);
+		update_option('dt_twitter_icon_fontsize_unit',$dt_twitter_icon_fontsize_unit);
+		update_option('dt_twitter_icon_fontcolor',$dt_twitter_icon_fontcolor);
+		update_option('dt_twitter_icon_fontcolor_hover',$dt_twitter_icon_fontcolor_hover);
+		update_option('dt_twitter_icon_margintop_unit',$dt_twitter_icon_margintop_unit);
+		update_option('dt_twitter_icon_spacing_unit',$dt_twitter_icon_spacing_unit);
 		
 		//If No Errors
 		if(!$_SESSION['display_message']) { $_SESSION['display_success']="The Display Options Were Successfully Updated"; }
@@ -677,7 +697,7 @@ function dt_admin() {
 												<label for="dt_twitter_post_expand"><?php _e('Display Expand Tweet Option:','dt_twitter'); ?></label>
 												<p class="labeldesc"><?php _e('Please Indicate Whether You Would Like An Expand Tweet Option Link After Each Tweet','dt_twitter'); ?></p>
 							                    <select name="dt_twitter_post_expand" class="small">
-							                    <?php /*<option value="2"<?php if(get_option('dt_twitter_post_expand')==2) { echo ' selected="selected"'; } ?>><?php _e('Icon','dt_twitter'); ?></option>*/ ?>
+							                    <option value="2"<?php if(get_option('dt_twitter_post_expand')==2) { echo ' selected="selected"'; } ?>><?php _e('Icon','dt_twitter'); ?></option>
 							                    <option value="1"<?php if(get_option('dt_twitter_post_expand')==1) { echo ' selected="selected"'; } ?>><?php _e('Yes','dt_twitter'); ?></option>
 							                    <option value="0"<?php if((get_option('dt_twitter_post_expand')==0) || (!get_option('dt_twitter_post_expand'))) { echo ' selected="selected"'; } ?>><?php _e('No','dt_twitter'); ?></option>
 							                    </select>
@@ -687,7 +707,7 @@ function dt_admin() {
 												<label for="dt_twitter_post_reply"><?php _e('Display Reply To Tweet Option:','dt_twitter'); ?></label>
 												<p class="labeldesc"><?php _e('Please Indicate Whether You Would Like A Reply To Tweet Option Link After Each Tweet','dt_twitter'); ?></p>
 							                    <select name="dt_twitter_post_reply" class="small">
-							                    <?php /*<option value="2"<?php if(get_option('dt_twitter_post_reply')==2) { echo ' selected="selected"'; } ?>><?php _e('Icon','dt_twitter'); ?></option>*/ ?>
+							                    <option value="2"<?php if(get_option('dt_twitter_post_reply')==2) { echo ' selected="selected"'; } ?>><?php _e('Icon','dt_twitter'); ?></option>
 							                    <option value="1"<?php if(get_option('dt_twitter_post_reply')==1) { echo ' selected="selected"'; } ?>><?php _e('Yes','dt_twitter'); ?></option>
 							                    <option value="0"<?php if((get_option('dt_twitter_post_reply')==0) || (!get_option('dt_twitter_post_reply'))) { echo ' selected="selected"'; } ?>><?php _e('No','dt_twitter'); ?></option>
 							                    </select>
@@ -697,7 +717,7 @@ function dt_admin() {
 												<label for="dt_twitter_post_retweet"><?php _e('Display Re-Tweet Option:','dt_twitter'); ?></label>
 												<p class="labeldesc"><?php _e('Please Indicate Whether You Would Like A Re-Tweet Option Link After Each Tweet','dt_twitter'); ?></p>
 							                    <select name="dt_twitter_post_retweet" class="small">
-							                    <?php /*<option value="2"<?php if(get_option('dt_twitter_post_retweet')==2) { echo ' selected="selected"'; } ?>><?php _e('Icon','dt_twitter'); ?></option>*/?>
+							                    <option value="2"<?php if(get_option('dt_twitter_post_retweet')==2) { echo ' selected="selected"'; } ?>><?php _e('Icon','dt_twitter'); ?></option>
 							                    <option value="1"<?php if(get_option('dt_twitter_post_retweet')==1) { echo ' selected="selected"'; } ?>><?php _e('Yes','dt_twitter'); ?></option>
 							                    <option value="0"<?php if((get_option('dt_twitter_post_retweet')==0) || (!get_option('dt_twitter_post_retweet'))) { echo ' selected="selected"'; } ?>><?php _e('No','dt_twitter'); ?></option>
 							                    </select>
@@ -707,7 +727,7 @@ function dt_admin() {
 												<label for="dt_twitter_post_favourite"><?php _e('Display Favourite Option:','dt_twitter'); ?></label>
 												<p class="labeldesc"><?php _e('Please Indicate Whether You Would Like An Add To Favourites Option Link After Each Tweet','dt_twitter'); ?></p>
 							                    <select name="dt_twitter_post_favourite" class="small">
-							                    <?php /*<option value="2"<?php if(get_option('dt_twitter_post_favourite')==2) { echo ' selected="selected"'; } ?>><?php _e('Icon','dt_twitter'); ?></option>*/?>
+							                    <option value="2"<?php if(get_option('dt_twitter_post_favourite')==2) { echo ' selected="selected"'; } ?>><?php _e('Icon','dt_twitter'); ?></option>
 							                    <option value="1"<?php if(get_option('dt_twitter_post_favourite')==1) { echo ' selected="selected"'; } ?>><?php _e('Yes','dt_twitter'); ?></option>
 							                    <option value="0"<?php if((get_option('dt_twitter_post_favourite')==0) || (!get_option('dt_twitter_post_favourite'))) { echo ' selected="selected"'; } ?>><?php _e('No','dt_twitter'); ?></option>
 							                    </select>
@@ -1127,7 +1147,65 @@ function dt_admin() {
 											</div>
 											
 										</fieldset>
-									</div>									
+									</div>	
+									
+									<div class="dt-setting">
+										<fieldset class="rounded">
+										<legend><?php _e('Tweet Icon Settings','dt_twitter'); ?></legend>
+	
+											<div class="dt-setting type-text">
+														
+												<div class="inputholder bottomgap">
+												<label for="dt_twitter_icon_fontsize"><?php _e('Tweet Icon Font Size:','dt_twitter'); ?></label>
+												<p class="labeldesc"><?php _e('Choose The Size Of Your Tweet Icon In Pixels / Ems','dt_twitter'); ?></p>
+												<input id="dt_twitter_icon_fontsize" type="text" size="36" name="dt_twitter_icon_fontsize" class="numberinput left" value="<?php echo get_option('dt_twitter_icon_fontsize'); ?>" />
+							                    <select name="dt_twitter_icon_fontsize_unit" class="numberinput left">
+							                    <option value="1"<?php if((get_option('dt_twitter_icon_fontsize_unit')==1) || (!get_option('dt_twitter_icon_fontsize_unit'))) { echo ' selected="selected"'; } ?>><?php _e('Pixels','dt_twitter'); ?></option>
+							                    <option value="0"<?php if(get_option('dt_twitter_icon_fontsize_unit')==0) { echo ' selected="selected"'; } ?>><?php _e('Ems','dt_twitter'); ?></option>
+							                    </select>
+							                    <br class="clearer" />
+												</div>
+														
+												<div class="inputholder bottomgap">
+												<label for="dt_twitter_icon_fontcolor"><?php _e('Tweet Icon Colour:','dt_twitter'); ?></label>
+												<p class="labeldesc"><?php _e('Choose The Colour For Your Tweet Icons (Leave Blank To Use Your Theme\'s Default Settings)','dt_twitter'); ?></p>
+												<input id="dt_twitter_icon_fontcolor" type="minicolors" size="36" name="dt_twitter_icon_fontcolor" class="colourinput color left" value="<?php echo get_option('dt_twitter_icon_fontcolor'); ?>" />
+							                    <br class="clearer" />
+												</div>
+
+												<div class="inputholder bottomgap">
+												<label for="dt_twitter_icon_fontcolor_hover"><?php _e('Tweet Icon Hover Colour:','dt_twitter'); ?></label>
+												<p class="labeldesc"><?php _e('Choose The Hover Colour For Your Tweet Icons (Leave Blank To Use Your Theme\'s Default Settings)','dt_twitter'); ?></p>
+												<input id="dt_twitter_icon_fontcolor_hover" type="minicolors" size="36" name="dt_twitter_icon_fontcolor_hover" class="colourinput color left" value="<?php echo get_option('dt_twitter_icon_fontcolor_hover'); ?>" />
+							                    <br class="clearer" />
+												</div>
+																																			
+												<div class="inputholder bottomgap">
+												<label for="dt_twitter_icon_margintop"><?php _e('Tweet Icons Top Margin:','dt_twitter'); ?></label>
+												<p class="labeldesc"><?php _e('Choose The Top Margin For The Tweet Icons In Pixels / Percent','dt_twitter'); ?></p>
+												<input id="dt_twitter_icon_margintop" type="text" size="36" name="dt_twitter_icon_margintop" class="numberinput left" value="<?php echo get_option('dt_twitter_icon_margintop'); ?>" />
+							                    <select name="dt_twitter_icon_margintop_unit" class="numberinput left">
+							                    <option value="1"<?php if((get_option('dt_twitter_icon_margintop_unit')==1) || (!get_option('dt_twitter_icon_margintop_unit'))) { echo ' selected="selected"'; } ?>><?php _e('Pixels','dt_twitter'); ?></option>
+							                    <option value="0"<?php if(get_option('dt_twitter_icon_margintop_unit')==0) { echo ' selected="selected"'; } ?>><?php _e('Percent','dt_twitter'); ?></option>
+							                    </select>
+							                    <br class="clearer" />
+												</div>
+												
+												<div class="inputholder bottomgap">
+												<label for="dt_twitter_icon_spacing"><?php _e('Tweet Icon Spacing:','dt_twitter'); ?></label>
+												<p class="labeldesc"><?php _e('Choose The Spacing Between Icons In Pixels / Percent','dt_twitter'); ?></p>
+												<input id="dt_twitter_icon_spacing" type="text" size="36" name="dt_twitter_icon_spacing" class="numberinput left" value="<?php echo get_option('dt_twitter_icon_spacing'); ?>" />
+							                    <select name="dt_twitter_icon_spacing_unit" class="numberinput left">
+							                    <option value="1"<?php if((get_option('dt_twitter_icon_spacing_unit')==1) || (!get_option('dt_twitter_icon_spacing_unit'))) { echo ' selected="selected"'; } ?>><?php _e('Pixels','dt_twitter'); ?></option>
+							                    <option value="0"<?php if(get_option('dt_twitter_icon_spacing_unit')==0) { echo ' selected="selected"'; } ?>><?php _e('Percent','dt_twitter'); ?></option>
+							                    </select>
+							                    <br class="clearer" />
+												</div>
+																								
+											</div>
+											
+										</fieldset>
+									</div>
 									
 									<div class="dt-setting"></div>
 									<input type="hidden" name="option" value="displayupdate" />

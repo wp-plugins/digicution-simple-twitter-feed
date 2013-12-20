@@ -4,7 +4,7 @@ Donate link: http://www.digicution.com/
 Tags: twitter,feed,tweet,simple,list,display,digicution
 Requires at least: 3.1
 Tested up to: 3.8
-Stable tag: 1.3
+Stable tag: 1.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -62,10 +62,10 @@ PHP's mcrypt library is also recommended but not essential.
 5. Ensure you change the Twitter Username value from 'digicution' to your Twitter Username to display your Tweets!
 6. Configure display options in 'Simple Twitter' Options Page
 7. Implement the plugin using either Widget, Shortcode or PHP Function method :
-7a. Drag & Drop Widget - If your current theme has widget areas available, you can head to Appearance -> Widgets and simply Drag the "Digicution Twitter" widget into the widget area where you want your tweets to appear.
-7b. Use The Shortcode - You can drop the Twitter Widget into any standard Wordpress Post or Page simply by pasting the shortcode below into the content section of the post/page: [dt_twitter]
-7c. Drop The Function In Manually - Or, for the more versed in theme customisation, you can simply drop the PHP function directly into your theme files where you want the Twitter Feed to appear. To do this, simply copy and paste the code below into your theme where you want the Feed to appear: `<?php dt_twitter(); ?>`
-8. Congrats, You've just added the Twitter Feed to your website :)
+8. Drag & Drop Widget - If your current theme has widget areas available, you can head to Appearance -> Widgets and simply Drag the "Digicution Twitter" widget into the widget area where you want your tweets to appear.
+9. Use The Shortcode - You can drop the Twitter Widget into any standard Wordpress Post or Page simply by pasting the shortcode below into the content section of the post/page: [dt_twitter]
+10. Drop The Function In Manually - Or, for the more versed in theme customisation, you can simply drop the PHP function directly into your theme files where you want the Twitter Feed to appear. To do this, simply copy and paste the code below into your theme where you want the Feed to appear: `<?php dt_twitter(); ?>`
+11. Congrats, You've just added the Twitter Feed to your website :)
 
 
 == Frequently Asked Questions ==
@@ -95,6 +95,13 @@ No problemo, just head to http://www.digicution.com/contact/ and submit the cont
 
 == Changelog ==
 
+= 1.4 =
+* Added SVG Icons For Tweet Reply, Retweet, Favourite & Expand (Request From Rajat Soni)
+* Added Customisation Options For Above Icons
+* Standardised Output For Text Versions Of Tweet Reply, Retweet, Favourite & Expand
+* Fixed Bug With Tweet Font Size In Ems
+* Added Support For Twitter's UTC Offset - Now Displays Correct Tweet Dates Worldwide (Request From Rajat Soni)
+
 = 1.3 =
 * Added SVG Menu & Header Icons For Wordpress 3.8 Support
 * Added Responsive Design For Easy Use On Mobile / Tablet
@@ -121,6 +128,9 @@ No problemo, just head to http://www.digicution.com/contact/ and submit the cont
 
 
 == Upgrade Notice ==
+
+= 1.4 =
+Upgrade For SVG Tweet Icon Support & Native Twitter UTC Date Support
 
 = 1.3 =
 Upgrade For Wordpress 3.8 & Mobile Device Support With A Shiny New Interface :)

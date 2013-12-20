@@ -1,6 +1,6 @@
 <?php /**
 Plugin Name: Digicution Simple Twitter Feed
-Version: 1.3
+Version: 1.4
 Plugin URI: http://www.digicution.com/wordpress-simple-twitter-feed/
 Description: This plugin provides a simple list of Tweets from a users screen name for usage within your Wordpress Blog or Template
 Author: Dan Perkins @ Digicution
@@ -73,7 +73,27 @@ function dt_menu() {
 }
 
 //Add Main Menu To Wordpress Admin
-add_action('admin_menu', 'dt_menu');
+add_action('admin_menu','dt_menu');
+
+
+////////////////////////////
+//  Add New Frontend CSS  //
+////////////////////////////
+
+//Frontend CSS Enqueue
+function dt_twitter_css() {
+
+	//Define Our CSS File For The Frontene
+   	wp_register_style($handle = 'dt_twitter_css',$src = plugins_url('css/frontend.css', __FILE__),$deps = array(),$ver = '1.0.0',$media = 'all');
+   	
+   	//Add Our CSS To Wordpress Frontend
+    wp_enqueue_style('dt_twitter_css');
+
+//End Frontend CSS Function	
+}
+
+//Add Main CSS To Wordpress Init
+add_action('init','dt_twitter_css');
 
 
 ////////////////////////////
