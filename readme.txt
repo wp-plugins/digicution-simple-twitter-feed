@@ -4,7 +4,7 @@ Donate link: http://www.digicution.com/
 Tags: twitter,feed,tweet,simple,list,display,digicution
 Requires at least: 3.1
 Tested up to: 3.8
-Stable tag: 1.4
+Stable tag: 1.4.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -70,6 +70,21 @@ PHP's mcrypt library is also recommended but not essential.
 
 == Frequently Asked Questions ==
 
+= What’s this Twitter App shenanigans?  How do I create a Twitter App? =
+
+1.  Head to https://dev.twitter.com/
+2.  Login
+3.  In the top right, click on your avatar and click on "My Applications"
+4.  Click "Create A New Application"
+5.  Fill in the application details on this page and click "Create your Twitter application"
+6.  Now, it'll take a minute or two but you should then be able to access your app from the avatar in the top right -> "My Applications"
+7.  When you click on your app on this page, it will give you all sorts of info on the page.  The bits you need are:
+
+Access Token
+Access Token Secret
+Consumer Key
+Consumer Secret
+
 = My Tweets aren't showing?  What's going on? =
 
 OK, Double check... No, triple check that you have the correct Access Token, Access Token Secret, Consumer Key & Consumer Secret from your Twitter App entered correctly in the main app setup screen.  If you're sure you've done this and you're still hvaing issues, please drop me an email via http://www.digicution.com/contact and I'll get back to you asap.
@@ -94,6 +109,10 @@ No problemo, just head to http://www.digicution.com/contact/ and submit the cont
 
 
 == Changelog ==
+
+= 1.4.1 =
+* Added language files (.mo & .po) for easier translation purposes.  If you fancy translating this plugin, there is a template file now in the languages folder which should enable you to use POEdit to translate.  Please feel free to translate and submit your .po files for inclusion in the plugin :)
+* Update Menu Logo SVG Colour 
 
 = 1.4 =
 * Added SVG Icons For Tweet Reply, Retweet, Favourite & Expand (Request From Rajat Soni)
