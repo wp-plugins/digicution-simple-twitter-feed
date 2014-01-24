@@ -80,6 +80,19 @@ PHP's mcrypt library is also recommended but not essential.
 6.  Now, it'll take a minute or two but you should then be able to access your app from the avatar in the top right -> "My Applications"
 7.  When you click on your app on this page, it will give you all sorts of info on the page.  The bits you need are: Access Token, Access Token Secret, Consumer Key, Consumer Secret
 
+= I have the correct access tokens and consumer keys but my feed displays Tweets from a completely different user plus they seem to be static Tweets and don't update. Is there something I need to do to make this work? =
+
+You've probably still got the default user setup (should be tweets from me :).
+
+1.  Go into your Wordpress admin
+2.  Click on the "Simple Twitter" option in the admin menu
+3.  Click on General Settings at the top
+4.  Change Twitter Username to the twitter user's tweets you want to display
+5.  Change Twitter Update Frequency for quicker updates (default is update once an hour)
+6.  Scroll down to the bottom & click "Update Options"
+
+Once you've done this, you should be golden :)
+
 = My Tweets aren't showing?  What's going on? =
 
 OK, Double check... No, triple check that you have the correct Access Token, Access Token Secret, Consumer Key & Consumer Secret from your Twitter App entered correctly in the main app setup screen.  If you're sure you've done this and you're still hvaing issues, please drop me an email via http://www.digicution.com/contact and I'll get back to you asap.
