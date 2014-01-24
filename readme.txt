@@ -78,12 +78,7 @@ PHP's mcrypt library is also recommended but not essential.
 4.  Click "Create A New Application"
 5.  Fill in the application details on this page and click "Create your Twitter application"
 6.  Now, it'll take a minute or two but you should then be able to access your app from the avatar in the top right -> "My Applications"
-7.  When you click on your app on this page, it will give you all sorts of info on the page.  The bits you need are:
-
-Access Token
-Access Token Secret
-Consumer Key
-Consumer Secret
+7.  When you click on your app on this page, it will give you all sorts of info on the page.  The bits you need are: Access Token, Access Token Secret, Consumer Key, Consumer Secret
 
 = My Tweets aren't showing?  What's going on? =
 
