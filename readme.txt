@@ -4,7 +4,7 @@ Donate link: http://www.digicution.com/
 Tags: twitter,feed,tweet,simple,list,display,digicution
 Requires at least: 3.1
 Tested up to: 3.8.1
-Stable tag: 1.4.2
+Stable tag: 1.4.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -119,6 +119,9 @@ No problemo, just head to http://www.digicution.com/contact/ and submit the cont
 
 
 == Changelog ==
+
+= 1.4.2.1 =
+* Removed 2 redundant header functions that may have caused duplication error messages in some setups.
 
 = 1.4.2 =
 * Fixed bug with shortcode where it would display above content if placed within a page or post.  This was due to the content being printed rather than returned.  Thanks to Michael Entwistle for pointing out the issue.

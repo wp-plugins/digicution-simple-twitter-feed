@@ -62,10 +62,10 @@ function dt_twitter_update($tweetNoOverride=NULL) {
 		////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 		//Create Base URL String Function
-		function buildBaseString($baseURI, $method, $params) { $r = array(); ksort($params); foreach($params as $key=>$value){ $r[] = "$key=" . rawurlencode($value); } return $method."&" . rawurlencode($baseURI) . '&' . rawurlencode(implode('&', $r)); }
+		//function buildBaseString($baseURI, $method, $params) { $r = array(); ksort($params); foreach($params as $key=>$value){ $r[] = "$key=" . rawurlencode($value); } return $method."&" . rawurlencode($baseURI) . '&' . rawurlencode(implode('&', $r)); }
 		
 		//Create OAuth CURL Header Function
-		function buildAuthorizationHeader($oauth) { $r = 'Authorization: OAuth '; $values = array(); foreach($oauth as $key=>$value) $values[] = "$key=\"" . rawurlencode($value) . "\""; $r .= implode(', ', $values); return $r; }
+		//function buildAuthorizationHeader($oauth) { $r = 'Authorization: OAuth '; $values = array(); foreach($oauth as $key=>$value) $values[] = "$key=\"" . rawurlencode($value) . "\""; $r .= implode(', ', $values); return $r; }
 	
 		//If We Have All Required Tokens & Keys
 		if($dt_twitter_oauth_access_token && $dt_twitter_oauth_access_token_secret && $dt_twitter_consumer_key && $dt_twitter_consumer_secret) {
