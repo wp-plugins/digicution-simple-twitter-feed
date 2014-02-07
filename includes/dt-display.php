@@ -254,7 +254,7 @@ function dt_twitter_update($tweetNoOverride=NULL) {
 			//End If We Have Data Statement
 			}
 		
-		//End If We Have ALl Required Keys & Tokens	
+		//End If We Have All Required Keys & Tokens	
 		}
 
 	//End Only Run If CURL Exists
@@ -268,7 +268,7 @@ function dt_twitter_update($tweetNoOverride=NULL) {
 /////  Digicution Simple Twitter Feed Main Function   /////
 ///////////////////////////////////////////////////////////	
 	
-function dt_twitter($tweetNoOverride=NULL) {
+function dt_twitter($tweetNoOverride=NULL,$shortcodeOutput=NULL) {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//////  New CURL Only Method As We Need To Send OAuth Headers For 1.1 API //////
@@ -303,17 +303,17 @@ function dt_twitter($tweetNoOverride=NULL) {
 			//If Twitter Was Updated Less Than Our Update Frequency Timeout		
 			if ($tweetDateCheck >= time()) {
 				
-				//Display The Tweets
-				dt_twitter_display($tweetNoOverride);
+				//Grab The Tweets
+				$dtoutput=dt_twitter_display($tweetNoOverride);
 			
 			//Otherwise - We Need To Update	
 			} else {
 			
-				//Udate The Tweets
+				//Update The Tweets
 				dt_twitter_update($tweetNoOverride);
 				
-				//Display The Tweets
-				dt_twitter_display($tweetNoOverride);
+				//Grab The Tweets
+				$dtoutput=dt_twitter_display($tweetNoOverride);
 				
 			//End Timeout Check	
 			}
@@ -324,10 +324,25 @@ function dt_twitter($tweetNoOverride=NULL) {
 			//Attempt To Update The Tweets
 			dt_twitter_update($tweetNoOverride);
 			
-			//Atttempt To Display The Tweets
-			dt_twitter_display($tweetNoOverride);
+			//Attempt To Grab The Tweets
+			$dtoutput=dt_twitter_display($tweetNoOverride);
 		
 		//End If We Have A Last Tweet
+		}
+	
+		//If This Is A Shortcode Request, Return The Data
+		if($shortcodeOutput==1) {
+		
+			//Return The Data
+			return $dtoutput;
+		
+		//Otherwise,
+		} else {
+			
+			//Display Those Bad Boys
+			echo $dtoutput;
+		
+		//End If Shortcode Request	
 		}
 	
 	//End If No CURL Function Exists
@@ -338,10 +353,29 @@ function dt_twitter($tweetNoOverride=NULL) {
 
 
 ///////////////////////////////////////////////////////////
+/////    Digicution Simple Twitter Feed Shortcode     /////
+///////////////////////////////////////////////////////////
+
+function dt_twitter_shortcode() {
+
+	//Run Shortcode Version Of Digicution Twitter
+	$dtoutput=dt_twitter(NULL,1);
+	
+	//Return Output
+	return $dtoutput;
+
+//End Specific Shortcode Function
+}
+
+
+///////////////////////////////////////////////////////////
 ///// Digicution Simple Twitter Feed Display Function /////
 ///////////////////////////////////////////////////////////
 
 function dt_twitter_display($tweetNoOverride=NULL) {
+	
+	//OK, Let's Define An Output Variable (So We Can Return For Shortcode)
+	$twitteroutput='';
 	
 	//Initiate Wordpress DB As Global Please...
 	global $wpdb;
@@ -429,22 +463,22 @@ function dt_twitter_display($tweetNoOverride=NULL) {
 	if($twitter_header_display==1) {
 	
 		//Start Header
-		echo '<div class="dt-twitter-header">'.$twitter_header_title;
+		$twitteroutput.='<div class="dt-twitter-header">'.$twitter_header_title;
 		
 		//If We Have A Header Follow Text Option
-		if ($twitter_header_follow==1) { echo '<a href="http://twitter.com/'.$screenname.'" class="dt-twitter-header-follow" rel="nofollow">Follow @'.$screenname.'</a></div>'; } 
+		if ($twitter_header_follow==1) { $twitteroutput.='<a href="http://twitter.com/'.$screenname.'" class="dt-twitter-header-follow" rel="nofollow">Follow @'.$screenname.'</a></div>'; } 
 		
 		//If We Have A Header Follow Button Option
-		if ($twitter_header_follow==2) { echo '<a href="https://twitter.com/'.$screenname.'" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false" data-dnt="true">Follow</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?\'http\':\'https\';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+\'://platform.twitter.com/widgets.js\';fjs.parentNode.insertBefore(js,fjs);}}(document, \'script\', \'twitter-wjs\');</script>'; }
+		if ($twitter_header_follow==2) { $twitteroutput.='<a href="https://twitter.com/'.$screenname.'" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false" data-dnt="true">Follow</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?\'http\':\'https\';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+\'://platform.twitter.com/widgets.js\';fjs.parentNode.insertBefore(js,fjs);}}(document, \'script\', \'twitter-wjs\');</script>'; }
 
 		//End Header
-		echo '</div>';
+		$twitteroutput.='</div>';
 
 	//End If Header Option Selected	
 	}
 	
 	//Start The Unordered List
-	echo '<ul class="dt-twitter"'.$style.'>';
+	$twitteroutput.='<ul class="dt-twitter"'.$style.'>';
 	
 	//Zero Odd Even Counter
 	$oddity=0;
@@ -534,15 +568,15 @@ function dt_twitter_display($tweetNoOverride=NULL) {
 						
 		//Echo List Starter
 		if ($count==1) {
-			echo '<li class="first"'.$list_style.'>';
+			$twitteroutput.='<li class="first"'.$list_style.'>';
 		} elseif ($count==$size && $oddity==2) {
-			echo '<li class="last_even"'.$list_style_alt.'>';
+			$twitteroutput.='<li class="last_even"'.$list_style_alt.'>';
 		} elseif ($count==$size) {
-			echo '<li'.$list_style.'>';
+			$twitteroutput.='<li'.$list_style.'>';
 		} elseif ($oddity==2) {
-			echo '<li class="post_even"'.$list_style_alt.'>';
+			$twitteroutput.='<li class="post_even"'.$list_style_alt.'>';
 		} else {
-			echo '<li'.$list_style.'>';
+			$twitteroutput.='<li'.$list_style.'>';
 		}
 		
 		//If User Images Option Is Selected & We Have A User Image
@@ -571,13 +605,13 @@ function dt_twitter_display($tweetNoOverride=NULL) {
 				$imgradius=$dt_twitter_image_bradius; if($dt_twitter_image_bradius_unit==1) { $imgradius.='px'; } else { $imgradius.='%'; }
 				
 				//Display User Image
-				echo '<a target="_blank" class="dt-twitter-avatar-link" style="float:left;" href="http://twitter.com/'.$req_screenname.'"><img src="'.$req_profileimage.'" class="dt-twitter-avatar" alt="'.$req_profileimage.' avatar" title="'.$req_profileimage.' avatar" style="float:left;margin-right:'.$imgmarginright.';margin-bottom:'.$imgmarginbottom.';width:'.$imgsize.';height:'.$imgsize.';-moz-border-radius:'.$imgradius.';-webkit-border-radius:'.$imgradius.';-khtml-border-radius:'.$imgradius.';border-radius:'.$imgradius.';" /></a>';
+				$twitteroutput.='<a target="_blank" class="dt-twitter-avatar-link" style="float:left;" href="http://twitter.com/'.$req_screenname.'"><img src="'.$req_profileimage.'" class="dt-twitter-avatar" alt="'.$req_profileimage.' avatar" title="'.$req_profileimage.' avatar" style="float:left;margin-right:'.$imgmarginright.';margin-bottom:'.$imgmarginbottom.';width:'.$imgsize.';height:'.$imgsize.';-moz-border-radius:'.$imgradius.';-webkit-border-radius:'.$imgradius.';-khtml-border-radius:'.$imgradius.';border-radius:'.$imgradius.';" /></a>';
 				
 			//Otherwise - Write Out Standard For Manual Styling
 			} else {
 			
 				//Display User Image
-				echo '<a target="_blank" class="dt-twitter-avatar-link" href="http://twitter.com/'.$req_screenname.'"><img src="'.$req_profileimage.'" class="dt-twitter-avatar" alt="'.$req_profileimage.' avatar" title="'.$req_profileimage.' avatar" /></a>';
+				$twitteroutput.='<a target="_blank" class="dt-twitter-avatar-link" href="http://twitter.com/'.$req_screenname.'"><img src="'.$req_profileimage.'" class="dt-twitter-avatar" alt="'.$req_profileimage.' avatar" title="'.$req_profileimage.' avatar" /></a>';
 				
 			//End Automatic / Manual Styling (Images)
 			}
@@ -622,21 +656,21 @@ function dt_twitter_display($tweetNoOverride=NULL) {
 			if ($dt_twitter_display_mcpadding) { $globalpadding=$dt_twitter_display_mcpadding.'px'; } else { $globalpadding='0px'; }
 			
 			//Write Out Tweet
-			echo '<span'.$fontstyle.'>'.$req_tweet.'</span><div style="clear:both;margin-bottom:'.$globalpadding.';"></div>';
+			$twitteroutput.='<span'.$fontstyle.'>'.$req_tweet.'</span><div style="clear:both;margin-bottom:'.$globalpadding.';"></div>';
 
 			//If We Have Any Post Options
 			if (($twitterpexpand==1) || ($twitterpreply==1) || ($twitterpretweet==1) || ($twitterpfavourite==1)) {
 				
 				//Start Container
-				echo '<div class="dt-twitter-end-container">';
+				$twitteroutput.='<div class="dt-twitter-end-container">';
 				
-				if ($twitterpreply==1) { echo '<a '.$linkstyle.' href="http://twitter.com/intent/tweet?related='.$screenname.'&in_reply_to='.$req_tweetid.'" class="dt-twitter-button-reply" rel="external" target="_blank">Reply</a>&nbsp;'; }
-				if ($twitterpretweet==1) { echo '<a '.$linkstyle.' href="http://twitter.com/intent/retweet?related='.$screenname.'&tweet_id='.$req_tweetid.'" class="dt-twitter-button-retweet" rel="external" target="_blank">Retweet</a>&nbsp;'; }
-				if ($twitterpfavourite==1) { echo '<a '.$linkstyle.' href="http://twitter.com/intent/favorite?related='.$screenname.'&tweet_id='.$req_tweetid.'" class="dt-twitter-button-favourite" rel="external" target="_blank">Favourite</a>&nbsp;'; }
-				if ($twitterpexpand==1) { echo '<a '.$linkstyle.' href="http://twitter.com/'.$screenname.'/status/'.$req_tweetid.'" class="dt-twitter-button-expand" rel="external" target="_blank">Expand</a>&nbsp;'; }
+				if ($twitterpreply==1) { $twitteroutput.='<a '.$linkstyle.' href="http://twitter.com/intent/tweet?related='.$screenname.'&in_reply_to='.$req_tweetid.'" class="dt-twitter-button-reply" rel="external" target="_blank">Reply</a>&nbsp;'; }
+				if ($twitterpretweet==1) { $twitteroutput.='<a '.$linkstyle.' href="http://twitter.com/intent/retweet?related='.$screenname.'&tweet_id='.$req_tweetid.'" class="dt-twitter-button-retweet" rel="external" target="_blank">Retweet</a>&nbsp;'; }
+				if ($twitterpfavourite==1) { $twitteroutput.='<a '.$linkstyle.' href="http://twitter.com/intent/favorite?related='.$screenname.'&tweet_id='.$req_tweetid.'" class="dt-twitter-button-favourite" rel="external" target="_blank">Favourite</a>&nbsp;'; }
+				if ($twitterpexpand==1) { $twitteroutput.='<a '.$linkstyle.' href="http://twitter.com/'.$screenname.'/status/'.$req_tweetid.'" class="dt-twitter-button-expand" rel="external" target="_blank">Expand</a>&nbsp;'; }
 
 				//Close Container
-				echo '</div>';
+				$twitteroutput.='</div>';
 				
 			//Otherwise, If We Have Icons To Be Displayed	
 			} elseif (($twitterpexpand==2) || ($twitterpreply==2) || ($twitterpretweet==2) || ($twitterpfavourite==2)) {
@@ -648,18 +682,18 @@ function dt_twitter_display($tweetNoOverride=NULL) {
 				$iconstyle='style="float:left;"';		
 								
 				//Start Container
-				echo '<div class="dt-twitter-end-container">';
+				$twitteroutput.='<div class="dt-twitter-end-container">';
 				
-				if ($twitterpreply==2) { echo '<a href="http://twitter.com/intent/tweet?related='.$screenname.'&in_reply_to='.$req_tweetid.'" class="dt-twitter-button-reply" rel="external" target="_blank"><div class="dt-twitter-icon-reply"></div></a>&nbsp;'; }
-				if ($twitterpretweet==2) { echo '<a href="http://twitter.com/intent/retweet?related='.$screenname.'&tweet_id='.$req_tweetid.'" class="dt-twitter-button-retweet" rel="external" target="_blank"><div class="dt-twitter-icon-retweet"></div></a>&nbsp;'; }
-				if ($twitterpfavourite==2) { echo '<a href="http://twitter.com/intent/favorite?related='.$screenname.'&tweet_id='.$req_tweetid.'" class="dt-twitter-button-favourite" rel="external" target="_blank"><div class="dt-twitter-icon-favourite"></div></a>&nbsp;'; }
-				if ($twitterpexpand==2) { echo '<a href="http://twitter.com/'.$screenname.'/status/'.$req_tweetid.'" class="dt-twitter-button-expand" rel="external" target="_blank"><div class="dt-twitter-icon-expand"></div></a>&nbsp;'; }
+				if ($twitterpreply==2) { $twitteroutput.='<a href="http://twitter.com/intent/tweet?related='.$screenname.'&in_reply_to='.$req_tweetid.'" class="dt-twitter-button-reply" rel="external" target="_blank"><div class="dt-twitter-icon-reply"></div></a>&nbsp;'; }
+				if ($twitterpretweet==2) { $twitteroutput.='<a href="http://twitter.com/intent/retweet?related='.$screenname.'&tweet_id='.$req_tweetid.'" class="dt-twitter-button-retweet" rel="external" target="_blank"><div class="dt-twitter-icon-retweet"></div></a>&nbsp;'; }
+				if ($twitterpfavourite==2) { $twitteroutput.='<a href="http://twitter.com/intent/favorite?related='.$screenname.'&tweet_id='.$req_tweetid.'" class="dt-twitter-button-favourite" rel="external" target="_blank"><div class="dt-twitter-icon-favourite"></div></a>&nbsp;'; }
+				if ($twitterpexpand==2) { $twitteroutput.='<a href="http://twitter.com/'.$screenname.'/status/'.$req_tweetid.'" class="dt-twitter-button-expand" rel="external" target="_blank"><div class="dt-twitter-icon-expand"></div></a>&nbsp;'; }
 	
 				//Clear Floats
-				echo '<div style="clear:both;"></div>';
+				$twitteroutput.='<div style="clear:both;"></div>';
 	
 				//Close Container
-				echo '</div>';
+				$twitteroutput.='</div>';
 				
 			//End If We Have Any Post Options
 			}
@@ -669,38 +703,38 @@ function dt_twitter_display($tweetNoOverride=NULL) {
 		} else {
 			
 			//Write Out Tweet
-			echo '<span class="dt-twitter-tweet">'.$req_tweet.'</span>';
+			$twitteroutput.='<span class="dt-twitter-tweet">'.$req_tweet.'</span>';
 
 			//If We Have Any Post Options
 			if (($twitterpexpand==1) || ($twitterpreply==1) || ($twitterpretweet==1) || ($twitterpfavourite==1)) {
 				
 				//Start Container
-				echo '<div class="dt-twitter-end-container">';
+				$twitteroutput.='<div class="dt-twitter-end-container">';
 				
-				if ($twitterpreply==1) { echo '<a href="http://twitter.com/intent/tweet?related='.$screenname.'&in_reply_to='.$req_tweetid.'" class="dt-twitter-button-reply" rel="external" target="_blank">Reply</a>'; }
-				if ($twitterpretweet==1) { echo '<a href="http://twitter.com/intent/retweet?related='.$screenname.'&tweet_id='.$req_tweetid.'" class="dt-twitter-button-retweet" rel="external" target="_blank">Retweet</a>'; }
-				if ($twitterpfavourite==1) { echo '<a href="http://twitter.com/intent/favorite?related='.$screenname.'&tweet_id='.$req_tweetid.'" class="dt-twitter-button-favourite" rel="external" target="_blank">Favourite</a>'; }
-				if ($twitterpexpand==1) { echo '<a href="http://twitter.com/'.$screenname.'/status/'.$req_tweetid.'" class="dt-twitter-button-expand" rel="external" target="_blank">Expand</a>'; }
+				if ($twitterpreply==1) { $twitteroutput.='<a href="http://twitter.com/intent/tweet?related='.$screenname.'&in_reply_to='.$req_tweetid.'" class="dt-twitter-button-reply" rel="external" target="_blank">Reply</a>'; }
+				if ($twitterpretweet==1) { $twitteroutput.='<a href="http://twitter.com/intent/retweet?related='.$screenname.'&tweet_id='.$req_tweetid.'" class="dt-twitter-button-retweet" rel="external" target="_blank">Retweet</a>'; }
+				if ($twitterpfavourite==1) { $twitteroutput.='<a href="http://twitter.com/intent/favorite?related='.$screenname.'&tweet_id='.$req_tweetid.'" class="dt-twitter-button-favourite" rel="external" target="_blank">Favourite</a>'; }
+				if ($twitterpexpand==1) { $twitteroutput.='<a href="http://twitter.com/'.$screenname.'/status/'.$req_tweetid.'" class="dt-twitter-button-expand" rel="external" target="_blank">Expand</a>'; }
 					
 				//Close Container
-				echo '</div>';
+				$twitteroutput.='</div>';
 				
 			//Otherwise, If We Have Icons To Be Displayed	
 			} elseif (($twitterpexpand==2) || ($twitterpreply==2) || ($twitterpretweet==2) || ($twitterpfavourite==2)) {
 														
 				//Start Container
-				echo '<div class="dt-twitter-end-container">';
+				$twitteroutput.='<div class="dt-twitter-end-container">';
 				
-				if ($twitterpreply==2) { echo '<a href="http://twitter.com/intent/tweet?related='.$screenname.'&in_reply_to='.$req_tweetid.'" class="dt-twitter-button-reply" rel="external" target="_blank"><div class="dt-twitter-icon-reply"></div></a>&nbsp;'; }
-				if ($twitterpretweet==2) { echo '<a href="http://twitter.com/intent/retweet?related='.$screenname.'&tweet_id='.$req_tweetid.'" class="dt-twitter-button-retweet" rel="external" target="_blank"><div class="dt-twitter-icon-retweet"></div></a>&nbsp;'; }
-				if ($twitterpfavourite==2) { echo '<a href="http://twitter.com/intent/favorite?related='.$screenname.'&tweet_id='.$req_tweetid.'" class="dt-twitter-button-favourite" rel="external" target="_blank"><div class="dt-twitter-icon-favourite"></div></a>&nbsp;'; }
-				if ($twitterpexpand==2) { echo '<a href="http://twitter.com/'.$screenname.'/status/'.$req_tweetid.'" class="dt-twitter-button-expand" rel="external" target="_blank"><div class="dt-twitter-icon-expand"></div></a>&nbsp;'; }
+				if ($twitterpreply==2) { $twitteroutput.='<a href="http://twitter.com/intent/tweet?related='.$screenname.'&in_reply_to='.$req_tweetid.'" class="dt-twitter-button-reply" rel="external" target="_blank"><div class="dt-twitter-icon-reply"></div></a>&nbsp;'; }
+				if ($twitterpretweet==2) { $twitteroutput.='<a href="http://twitter.com/intent/retweet?related='.$screenname.'&tweet_id='.$req_tweetid.'" class="dt-twitter-button-retweet" rel="external" target="_blank"><div class="dt-twitter-icon-retweet"></div></a>&nbsp;'; }
+				if ($twitterpfavourite==2) { $twitteroutput.='<a href="http://twitter.com/intent/favorite?related='.$screenname.'&tweet_id='.$req_tweetid.'" class="dt-twitter-button-favourite" rel="external" target="_blank"><div class="dt-twitter-icon-favourite"></div></a>&nbsp;'; }
+				if ($twitterpexpand==2) { $twitteroutput.='<a href="http://twitter.com/'.$screenname.'/status/'.$req_tweetid.'" class="dt-twitter-button-expand" rel="external" target="_blank"><div class="dt-twitter-icon-expand"></div></a>&nbsp;'; }
 	
 				//Clear Floats
-				echo '<div style="clear:both;"></div>';
+				$twitteroutput.='<div style="clear:both;"></div>';
 	
 				//Close Container
-				echo '</div>';
+				$twitteroutput.='</div>';
 				
 			//End If We Have Any Post Options
 			}
@@ -709,7 +743,7 @@ function dt_twitter_display($tweetNoOverride=NULL) {
 		}
 		
 		//Close List Element
-		 echo "</li>";
+		 $twitteroutput.="</li>";
 		
 		//Reset Oddity Counter If We Are On 1
 		if ($oddity==2) { $oddity=0; }
@@ -717,14 +751,20 @@ function dt_twitter_display($tweetNoOverride=NULL) {
 	}
 	
 	//Close Unordered List
-	echo "</ul>";
+	$twitteroutput.="</ul>";
 	
 	//If We Have A Follow Text Option
-	if ($twitterfollow==1) { echo '<div class="dt-twitter-p-container"><a href="http://twitter.com/'.$screenname.'" class="dt-twitter-button" rel="nofollow">Follow @'.$screenname.'</a></div>'; } 
+	if ($twitterfollow==1) { $twitteroutput.='<div class="dt-twitter-p-container"><a href="http://twitter.com/'.$screenname.'" class="dt-twitter-button" rel="nofollow">Follow @'.$screenname.'</a></div>'; } 
 	
 	//If We Have A Follow Button Option
-	if ($twitterfollow==2) { echo '<a href="https://twitter.com/'.$screenname.'" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false" data-dnt="true">Follow</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?\'http\':\'https\';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+\'://platform.twitter.com/widgets.js\';fjs.parentNode.insertBefore(js,fjs);}}(document, \'script\', \'twitter-wjs\');</script>'; }
+	if ($twitterfollow==2) { $twitteroutput.='<a href="https://twitter.com/'.$screenname.'" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false" data-dnt="true">Follow</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?\'http\':\'https\';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+\'://platform.twitter.com/widgets.js\';fjs.parentNode.insertBefore(js,fjs);}}(document, \'script\', \'twitter-wjs\');</script>'; }
 	
+	//Return The Output
+	return $twitteroutput;
+	
+	//Exit Function
+	exit();
+		
 //End Display Function	
 }
 
@@ -758,7 +798,7 @@ function twitter_icon_css() {
 	if(get_option('dt_twitter_icon_spacing_unit')==1) { $dt_twitter_icon_spacing_unit='px'; } else { $dt_twitter_icon_spacing_unit='%'; }
 	
 	//Write CSS Out
-	echo '
+	$twitteroutput.='
 	<style type="text/css" media="screen">
 	
 		a.dt-twitter-button-reply div.dt-twitter-icon-reply,
