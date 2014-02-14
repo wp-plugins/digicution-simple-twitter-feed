@@ -466,7 +466,7 @@ function dt_twitter_display($tweetNoOverride=NULL) {
 		$twitteroutput.='<div class="dt-twitter-header">'.$twitter_header_title;
 		
 		//If We Have A Header Follow Text Option
-		if ($twitter_header_follow==1) { $twitteroutput.='<a href="http://twitter.com/'.$screenname.'" class="dt-twitter-header-follow" rel="nofollow">Follow @'.$screenname.'</a></div>'; } 
+		if ($twitter_header_follow==1) { $twitteroutput.='<a href="http://twitter.com/'.$screenname.'" class="dt-twitter-header-follow" rel="nofollow">Follow @'.$screenname.'</a>'; } 
 		
 		//If We Have A Header Follow Button Option
 		if ($twitter_header_follow==2) { $twitteroutput.='<a href="https://twitter.com/'.$screenname.'" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false" data-dnt="true">Follow</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?\'http\':\'https\';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+\'://platform.twitter.com/widgets.js\';fjs.parentNode.insertBefore(js,fjs);}}(document, \'script\', \'twitter-wjs\');</script>'; }
