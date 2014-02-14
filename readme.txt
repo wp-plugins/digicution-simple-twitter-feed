@@ -121,7 +121,7 @@ No problemo, just head to http://www.digicution.com/contact/ and submit the cont
 == Changelog ==
 
 = 1.4.2.2 =
-* Fixed Minor Display Bug When "Display Follow Link In Header" was set to "Text Link".
+* Fixed Minor Display Bug When "Display Follow Link In Header" was set to "Text Link". Thanks to Chris Campbell for pointing out the issue.
 
 = 1.4.2.1 =
 * Removed 2 redundant header functions that may have caused duplication error messages in some setups.
