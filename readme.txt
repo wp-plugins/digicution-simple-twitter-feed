@@ -4,7 +4,7 @@ Donate link: http://www.digicution.com/
 Tags: twitter,feed,tweet,simple,list,display,digicution
 Requires at least: 3.1
 Tested up to: 3.8.1
-Stable tag: 1.4.2.2
+Stable tag: 1.4.2.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -120,8 +120,12 @@ No problemo, just head to http://www.digicution.com/contact/ and submit the cont
 
 == Changelog ==
 
+= 1.4.2.3 =
+* Fixed minor bug so plugin now outputs the correct CSS if using Twitter Icons (& Automatic Styling) within the plugin.  Thanks to Rajat Soni for pointing out the issue.  
+* Also removed some extra redundant code and renamed the CSS output function to something more unique to help avoid duplication errors.
+
 = 1.4.2.2 =
-* Fixed Minor Display Bug When "Display Follow Link In Header" was set to "Text Link". Thanks to Chris Campbell for pointing out the issue.
+* Fixed Minor Display Bug When "Display Follow Link In Header" was set to "Text Link".
 
 = 1.4.2.1 =
 * Removed 2 redundant header functions that may have caused duplication error messages in some setups.

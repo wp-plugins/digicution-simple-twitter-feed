@@ -61,12 +61,6 @@ function dt_twitter_update($tweetNoOverride=NULL) {
 		////// Lookup Twitter Details - New CURL Only Method As We Need To Send OAuth Headers For 1.1 API //////
 		////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-		//Create Base URL String Function
-		//function buildBaseString($baseURI, $method, $params) { $r = array(); ksort($params); foreach($params as $key=>$value){ $r[] = "$key=" . rawurlencode($value); } return $method."&" . rawurlencode($baseURI) . '&' . rawurlencode(implode('&', $r)); }
-		
-		//Create OAuth CURL Header Function
-		//function buildAuthorizationHeader($oauth) { $r = 'Authorization: OAuth '; $values = array(); foreach($oauth as $key=>$value) $values[] = "$key=\"" . rawurlencode($value) . "\""; $r .= implode(', ', $values); return $r; }
-	
 		//If We Have All Required Tokens & Keys
 		if($dt_twitter_oauth_access_token && $dt_twitter_oauth_access_token_secret && $dt_twitter_consumer_key && $dt_twitter_consumer_secret) {
 	
@@ -74,6 +68,7 @@ function dt_twitter_update($tweetNoOverride=NULL) {
 			////// Construct Twitter Details //////
 			///////////////////////////////////////
 			
+			//Construct oAuth Hash
 			$oauth_hash = '';
 			$oauth_hash .= 'count='.$size.'&';
 			if($getretweets!=1) { $oauth_hash .= 'exclude_replies=true&'; }
@@ -87,6 +82,7 @@ function dt_twitter_update($tweetNoOverride=NULL) {
 			$oauth_hash .= 'oauth_version=1.0&';	
 			$oauth_hash .= 'screen_name='.$screenname;
 	
+			//Construct Base
 			$base = '';
 			$base .= 'GET';
 			$base .= '&';
@@ -94,14 +90,17 @@ function dt_twitter_update($tweetNoOverride=NULL) {
 			$base .= '&';
 			$base .= rawurlencode($oauth_hash);	
 			
+			//Construct Key
 			$key = '';
 			$key .= rawurlencode($dt_twitter_consumer_secret);
 			$key .= '&';
 			$key .= rawurlencode($dt_twitter_oauth_access_token_secret);
 			
+			//Construct Signature
 			$signature = base64_encode(hash_hmac('sha1', $base, $key, true));
 			$signature = rawurlencode($signature);	
 	
+			//Construct oAuth Header
 			$oauth_header = '';
 			$oauth_header .= 'count="'.$size.'", ';
 			if($getretweets!=1) { $oauth_header .= 'exclude_replies="true", '; }
@@ -116,6 +115,7 @@ function dt_twitter_update($tweetNoOverride=NULL) {
 			$oauth_header .= 'oauth_version="1.0", ';
 			$oauth_header .= 'screen_name="'.$screenname.'"';
 			
+			//Construct cURL Header
 			$curl_header = array("Authorization: Oauth {$oauth_header}", 'Expect:');	
 	
 			////////////////////////////////////
@@ -674,10 +674,7 @@ function dt_twitter_display($tweetNoOverride=NULL) {
 				
 			//Otherwise, If We Have Icons To Be Displayed	
 			} elseif (($twitterpexpand==2) || ($twitterpreply==2) || ($twitterpretweet==2) || ($twitterpfavourite==2)) {
-				
-				//Add Our Twitter Icon CSS To Wordpress Header		
-				//add_action ('wp_head','twitter_icon_css');
-				
+								
 				//Create Our Icon Style
 				$iconstyle='style="float:left;"';		
 								
@@ -785,8 +782,8 @@ function dt_convert_urls($text) {
 /////   Digicution Simple Twitter Feed Icon CSS (New)   /////
 /////////////////////////////////////////////////////////////
 
-function twitter_icon_css() {
-	 
+function dt_twitter_icon_css() {
+	 	 
 	//Get Twitter Icon Options
 	$dt_twitter_icon_fontsize=get_option('dt_twitter_icon_fontsize');
 	if(get_option('dt_twitter_icon_fontsize_unit')==1) { $dt_twitter_icon_fontsize_unit='px'; } else { $dt_twitter_icon_fontsize_unit='em'; }
@@ -797,7 +794,7 @@ function twitter_icon_css() {
 	$dt_twitter_icon_spacing=get_option('dt_twitter_icon_spacing');	
 	if(get_option('dt_twitter_icon_spacing_unit')==1) { $dt_twitter_icon_spacing_unit='px'; } else { $dt_twitter_icon_spacing_unit='%'; }
 	
-	//Write CSS Out
+	//Compile Icon CSS
 	$twitteroutput.='
 	<style type="text/css" media="screen">
 	
@@ -814,8 +811,10 @@ function twitter_icon_css() {
 		{ color:'.$dt_twitter_icon_fontcolor_hover.'; }
 		
 	</style>
-	
 	';
+	
+	//Write CSS Out
+	echo $twitteroutput;
 	
 //End Icon CSS Function	
 } 
@@ -830,7 +829,7 @@ $twitterpfavourite=get_option('dt_twitter_post_favourite');
 if (($twitterpexpand==2) || ($twitterpreply==2) || ($twitterpretweet==2) || ($twitterpfavourite==2)) {
 
 	//Add Our Twitter Icon CSS To Wordpress Header		
-	add_action ('wp_head','twitter_icon_css');	
+	add_action('wp_head','dt_twitter_icon_css');	
 
 //End If We Have Any Icons Selected	
 }						
