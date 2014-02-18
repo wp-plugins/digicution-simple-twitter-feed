@@ -4,7 +4,7 @@ Donate link: http://www.digicution.com/
 Tags: twitter,feed,tweet,simple,list,display,digicution
 Requires at least: 3.1
 Tested up to: 3.8.1
-Stable tag: 1.4.2.3
+Stable tag: 1.4.2.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -119,6 +119,9 @@ No problemo, just head to http://www.digicution.com/contact/ and submit the cont
 
 
 == Changelog ==
+
+= 1.4.2.4 =
+* Amended order of Twitter Key Entries to match those on dev.twitter.com and renamed Consumer to API for easier entry (and less confusing for user).  Thanks to Jesse Everett for pointing out the issue.
 
 = 1.4.2.3 =
 * Fixed minor bug so plugin now outputs the correct CSS if using Twitter Icons (& Automatic Styling) within the plugin.  Thanks to Rajat Soni for pointing out the issue.  

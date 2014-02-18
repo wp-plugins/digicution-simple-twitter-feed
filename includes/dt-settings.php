@@ -37,17 +37,17 @@ function dt_admin() {
 		//Set Update Flag Variable
 		$dt_twitter_update=0;
 		
+		//Update Consumer Key Or Add Error Message
+		if (!$dt_twitter_consumer_key) { $_SESSION['application_message'].="Please Enter The Twitter Application API Key<br/>"; } else { if(dtCrypt('d',get_option('dt_twitter_consumer_key'))!=$dt_twitter_consumer_key) { $dt_twitter_update=1; } update_option('dt_twitter_consumer_key',$dt_twitter_consumer_key); }
+
+		//Update Consumer Secret Or Add Error Message
+		if (!$dt_twitter_consumer_secret) { $_SESSION['application_message'].="Please Enter The Twitter Application API Secret<br/>"; } else {	if(dtCrypt('d',get_option('dt_twitter_consumer_secret'))!=$dt_twitter_consumer_secret) { $dt_twitter_update=1; } update_option('dt_twitter_consumer_secret',$dt_twitter_consumer_secret); }
+		
 		//Update Access Token Or Add Error Message
 		if (!$dt_twitter_oauth_access_token) { $_SESSION['application_message'].="Please Enter The Twitter Application Access Token<br/>"; } else {	if(dtCrypt('d',get_option('dt_twitter_oauth_access_token'))!=$dt_twitter_oauth_access_token) { $dt_twitter_update=1; } update_option('dt_twitter_oauth_access_token',$dt_twitter_oauth_access_token); }
 		
 		//Update Access Token Secret Or Add Error Message
 		if (!$dt_twitter_oauth_access_token_secret) { $_SESSION['application_message'].="Please Enter The Twitter Application Access Token Secret<br/>"; } else { if(dtCrypt('d',get_option('dt_twitter_oauth_access_token_secret'))!=$dt_twitter_oauth_access_token_secret) { $dt_twitter_update=1; } update_option('dt_twitter_oauth_access_token_secret',$dt_twitter_oauth_access_token_secret); }
-
-		//Update Consumer Key Or Add Error Message
-		if (!$dt_twitter_consumer_key) { $_SESSION['application_message'].="Please Enter The Twitter Application Consumer Key<br/>"; } else { if(dtCrypt('d',get_option('dt_twitter_consumer_key'))!=$dt_twitter_consumer_key) { $dt_twitter_update=1; } update_option('dt_twitter_consumer_key',$dt_twitter_consumer_key); }
-
-		//Update Consumer Secret Or Add Error Message
-		if (!$dt_twitter_consumer_secret) { $_SESSION['application_message'].="Please Enter The Twitter Application Consumer Secret<br/>"; } else {	if(dtCrypt('d',get_option('dt_twitter_consumer_secret'))!=$dt_twitter_consumer_secret) { $dt_twitter_update=1; } update_option('dt_twitter_consumer_secret',$dt_twitter_consumer_secret); }
 
 		//If No Errors
 		if(!$_SESSION['application_message']) { $_SESSION['application_success']="The Options Were Successfully Updated"; }
@@ -440,6 +440,18 @@ function dt_admin() {
 											?>
 	
 											<div class="dt-setting type-text" id="setting_site_title">
+													
+												<div class="inputholder bottomgap">
+												<label for="dt_twitter_consumer_key"><?php _e('API Key:','digicution-simple-twitter-feed'); ?></label>
+												<p class="labeldesc"><?php _e('Please Enter Your Twitter Application API Key','digicution-simple-twitter-feed'); ?></p>
+												<input id="dt_twitter_consumer_key" class="full" type="text" size="36" name="dt_twitter_consumer_key" value="<?php if($dt_twitter_consumer_key) { echo $dt_twitter_consumer_key; } ?>" />
+												</div>
+												
+												<div class="inputholder bottomgap">
+												<label for="dt_twitter_consumer_secret"><?php _e('API Secret:','digicution-simple-twitter-feed'); ?></label>
+												<p class="labeldesc"><?php _e('Please Enter Your Twitter Application API Secret','digicution-simple-twitter-feed'); ?></p>
+												<input id="dt_twitter_consumer_secret" class="full" type="text" size="36" name="dt_twitter_consumer_secret" value="<?php if($dt_twitter_consumer_secret) { echo $dt_twitter_consumer_secret; } ?>" />
+												</div>
 														
 												<div class="inputholder bottomgap">
 												<label for="dt_twitter_oauth_access_token"><?php _e('Access Token:','digicution-simple-twitter-feed'); ?></label>
@@ -447,24 +459,12 @@ function dt_admin() {
 												<input id="dt_twitter_oauth_access_token" class="full" type="text" size="36" name="dt_twitter_oauth_access_token" value="<?php if($dt_twitter_oauth_access_token) { echo $dt_twitter_oauth_access_token; } ?>" />
 												</div>
 												
-												<div class="inputholder bottomgap">
+												<div class="inputholder">
 												<label for="dt_twitter_oauth_access_token_secret"><?php _e('Access Token Secret:','digicution-simple-twitter-feed'); ?></label>
 												<p class="labeldesc"><?php _e('Please Enter Your Twitter Application Access Token Secret','digicution-simple-twitter-feed'); ?></p>
 												<input id="dt_twitter_oauth_access_token_secret" class="full" type="text" size="36" name="dt_twitter_oauth_access_token_secret" value="<?php if($dt_twitter_oauth_access_token_secret) { echo $dt_twitter_oauth_access_token_secret; } ?>" />
 												</div>
-												
-												<div class="inputholder bottomgap">
-												<label for="dt_twitter_consumer_key"><?php _e('Consumer Key:','digicution-simple-twitter-feed'); ?></label>
-												<p class="labeldesc"><?php _e('Please Enter Your Twitter Application Consumer Key','digicution-simple-twitter-feed'); ?></p>
-												<input id="dt_twitter_consumer_key" class="full" type="text" size="36" name="dt_twitter_consumer_key" value="<?php if($dt_twitter_consumer_key) { echo $dt_twitter_consumer_key; } ?>" />
-												</div>
-												
-												<div class="inputholder">
-												<label for="dt_twitter_consumer_secret"><?php _e('Consumer Secret:','digicution-simple-twitter-feed'); ?></label>
-												<p class="labeldesc"><?php _e('Please Enter Your Twitter Application Consumer Secret','digicution-simple-twitter-feed'); ?></p>
-												<input id="dt_twitter_consumer_secret" class="full" type="text" size="36" name="dt_twitter_consumer_secret" value="<?php if($dt_twitter_consumer_secret) { echo $dt_twitter_consumer_secret; } ?>" />
-												</div>
-												
+																								
 											</div>
 											
 										</fieldset>

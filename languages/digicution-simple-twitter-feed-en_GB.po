@@ -127,19 +127,19 @@ msgid "Please Enter Your Twitter Application Access Token Secret"
 msgstr ""
 
 #: includes/dt-settings.php:457
-msgid "Consumer Key:"
+msgid "API Key:"
 msgstr ""
 
 #: includes/dt-settings.php:458
-msgid "Please Enter Your Twitter Application Consumer Key"
+msgid "Please Enter Your Twitter Application API Key"
 msgstr ""
 
 #: includes/dt-settings.php:463
-msgid "Consumer Secret:"
+msgid "API Secret:"
 msgstr ""
 
 #: includes/dt-settings.php:464
-msgid "Please Enter Your Twitter Application Consumer Secret"
+msgid "Please Enter Your Twitter Application API Secret"
 msgstr ""
 
 #: includes/dt-settings.php:475
