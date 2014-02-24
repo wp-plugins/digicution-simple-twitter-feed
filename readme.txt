@@ -4,7 +4,7 @@ Donate link: http://www.digicution.com/
 Tags: twitter,feed,tweet,simple,list,display,digicution
 Requires at least: 3.1
 Tested up to: 3.8.1
-Stable tag: 1.4.2.5
+Stable tag: 1.4.2.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -119,6 +119,9 @@ No problemo, just head to http://www.digicution.com/contact/ and submit the cont
 
 
 == Changelog ==
+
+= 1.4.2.6 =
+* Changed Tweet UTC datetime difference calculation to work outside of Wordpress date functions to create correct difference across timezones.  Thanks to Maciek Nowakiewicz for highlighjting the issue.
 
 = 1.4.2.5 =
 * Changed Tweet refresh UTC date storage in DB to that of Wordpress Installation rather than the MySQL Server as the 2 server setups could be in different timezones.  Thanks to Maciek Nowakiewicz for highlighjting the issue.

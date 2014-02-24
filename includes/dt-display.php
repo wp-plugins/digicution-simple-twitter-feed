@@ -214,20 +214,11 @@ function dt_twitter_update($tweetNoOverride=NULL) {
 							$tweet = str_replace($pattern, $string[$i], $tweet);
 						}
 						
-						//Sort Out Date & Tweet Link
-						$utcoffset=$t->user->utc_offset;
+						//Grab Tweet Date (UTC)
 						$date=strtotime($t->created_at);
-						$dateutc=intval($date)+intval($utcoffset);
-						
-						//Debug - Date Testing (For UTC Offset)
-						//echo $date.'<br/>';
-						//echo $utcoffset.'<br/>';
-						//echo $dateutc.'<br/>';
-						//echo human_time_diff($date,current_time("timestamp")).'<br/>';
-						//echo human_time_diff($dateutc,current_time("timestamp")).'<br/>';
-						
-						//Create Human Time Difference Date
-						$date=human_time_diff($dateutc,current_time("timestamp"));
+
+						//Date From Twitter Is UTC - As Is PHP's, Thus Date Comparison Of 2 Gives Us Correct Time Difference.  Thanks To Maciek Nowakiewic​z For Pointing This Out (And Saving Me Time Doing Ridonculous UTC Calcs :)
+						$date=human_time_diff($date,time());
 									
 						//Clean Twitter ID
 						$tweetid=mysql_real_escape_string($tweetid);
