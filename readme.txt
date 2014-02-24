@@ -121,10 +121,10 @@ No problemo, just head to http://www.digicution.com/contact/ and submit the cont
 == Changelog ==
 
 = 1.4.2.6 =
-* Changed Tweet UTC datetime difference calculation to work outside of Wordpress date functions to create correct difference across timezones.  Thanks to Maciek Nowakiewicz for highlighjting the issue.
+* Changed Tweet UTC datetime difference calculation to work outside of Wordpress date functions to create correct difference across timezones.  Thanks to Maciek Nowakiewicz for highlighting the issue.
 
 = 1.4.2.5 =
-* Changed Tweet refresh UTC date storage in DB to that of Wordpress Installation rather than the MySQL Server as the 2 server setups could be in different timezones.  Thanks to Maciek Nowakiewicz for highlighjting the issue.
+* Changed Tweet refresh UTC date storage in DB to that of Wordpress Installation rather than the MySQL Server as the 2 server setups could be in different timezones.  Thanks to Maciek Nowakiewicz for highlighting the issue.
 
 = 1.4.2.4 =
 * Amended order of Twitter Key Entries to match those on dev.twitter.com and renamed Consumer to API for easier entry (and less confusing for user).  Thanks to Jesse Everett for pointing out the issue.
