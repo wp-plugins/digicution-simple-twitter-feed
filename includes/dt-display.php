@@ -133,7 +133,7 @@ function dt_twitter_update($tweetNoOverride=NULL) {
 	
 			//Decode Data Ready For Processing
 			$data=json_decode($json);
-		
+				
 			//For Debugging Purposes - Display All Info Returned By Twitter API
 			//print_r($json);
 			//echo '<br/><br/>';
@@ -165,10 +165,10 @@ function dt_twitter_update($tweetNoOverride=NULL) {
 						//Set Standard Variables
 						$tweet="";
 						$retweet=1;
-				
-						//Get Tweet ID For Date Link
-						$tweetid=$t->id;
-						
+								
+						//Get Tweet ID For Date Link - Added Str Val (And id_str Rather Than id To Remove Any Possible +E Numbers In Certain PHP Installs)
+						$tweetid=strval($t->id_str);
+												
 						//Grab User Vars
 						$user=$t->user;
 						
