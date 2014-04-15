@@ -593,8 +593,9 @@ function dt_admin() {
 												<div class="inputholder bottomgap">
 												<label for="dt_twitter_follow"><?php _e('Display Follow Link After Tweets:','digicution-simple-twitter-feed'); ?></label>
 												<p class="labeldesc"><?php _e('Please Indicate Whether You Would Like A Link To Your Twitter Profile At The Bottom Of The Feed','digicution-simple-twitter-feed'); ?></p>
-							                    <select name="dt_twitter_follow" class="small">
-							                    <option value="2"<?php if(get_option('dt_twitter_follow')==2) { echo ' selected="selected"'; } ?>><?php _e('Follow Button','digicution-simple-twitter-feed'); ?></option>
+							                    <select name="dt_twitter_follow" class="medium">
+							                    <option value="3"<?php if(get_option('dt_twitter_follow')==3) { echo ' selected="selected"'; } ?>><?php _e('Follow Button (With &#64;Screenname)','digicution-simple-twitter-feed'); ?></option>
+							                    <option value="2"<?php if(get_option('dt_twitter_follow')==2) { echo ' selected="selected"'; } ?>><?php _e('Follow Button (No &#64;Screenname)','digicution-simple-twitter-feed'); ?></option>
 							                    <option value="1"<?php if(get_option('dt_twitter_follow')==1) { echo ' selected="selected"'; } ?>><?php _e('Text Link','digicution-simple-twitter-feed'); ?></option>
 							                    <option value="0"<?php if((get_option('dt_twitter_follow')==0) || (!get_option('dt_twitter_follow'))) { echo ' selected="selected"'; } ?>><?php _e('No','digicution-simple-twitter-feed'); ?></option>
 							                    </select>
@@ -647,8 +648,9 @@ function dt_admin() {
 												<div class="inputholder">
 												<label for="dt_twitter_header_follow"><?php _e('Display Follow Link In Header:','digicution-simple-twitter-feed'); ?></label>
 												<p class="labeldesc"><?php _e('Please Indicate Whether You Would Like A Link To Your Twitter Profile In Your Header','digicution-simple-twitter-feed'); ?></p>
-							                    <select name="dt_twitter_header_follow" class="small">
-							                    <option value="2"<?php if(get_option('dt_twitter_header_follow')==2) { echo ' selected="selected"'; } ?>><?php _e('Follow Button','digicution-simple-twitter-feed'); ?></option>
+							                    <select name="dt_twitter_header_follow" class="medium">
+							                    <option value="3"<?php if(get_option('dt_twitter_header_follow')==3) { echo ' selected="selected"'; } ?>><?php _e('Follow Button (With &#64;Screenname)','digicution-simple-twitter-feed'); ?></option>
+							                    <option value="2"<?php if(get_option('dt_twitter_header_follow')==2) { echo ' selected="selected"'; } ?>><?php _e('Follow Button (No &#64;Screenname)','digicution-simple-twitter-feed'); ?></option>
 							                    <option value="1"<?php if(get_option('dt_twitter_header_follow')==1) { echo ' selected="selected"'; } ?>><?php _e('Text Link','digicution-simple-twitter-feed'); ?></option>
 							                    <option value="0"<?php if((get_option('dt_twitter_header_follow')==0) || (!get_option('dt_twitter_header_follow'))) { echo ' selected="selected"'; } ?>><?php _e('No','digicution-simple-twitter-feed'); ?></option>
 							                    </select>

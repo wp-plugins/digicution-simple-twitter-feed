@@ -3,8 +3,8 @@ Contributors: digicution
 Donate link: http://www.digicution.com/
 Tags: twitter,feed,tweet,simple,list,display,digicution
 Requires at least: 3.1
-Tested up to: 3.8.1
-Stable tag: 1.4.2.7
+Tested up to: 3.8.3
+Stable tag: 1.4.2.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -119,6 +119,10 @@ No problemo, just head to http://www.digicution.com/contact/ and submit the cont
 
 
 == Changelog ==
+
+= 1.4.2.8 =
+* Fixed 'line-height' bug if Tweet Font Size set to 'ems'.  Thanks to Ian Clarke for highlighting the issue.
+* Added @Screenname option to Follow Buttons (Header & Footer).  Extra request from Ian Clarke.
 
 = 1.4.2.7 =
 * Changed Tweet ID to use ‘id_str’ instead as original number could cause erronous input on some PHP installations.

@@ -465,6 +465,9 @@ function dt_twitter_display($tweetNoOverride=NULL) {
 		//If We Have A Header Follow Button Option
 		if ($twitter_header_follow==2) { $twitteroutput.='<a href="https://twitter.com/'.$screenname.'" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false" data-dnt="true">Follow</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?\'http\':\'https\';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+\'://platform.twitter.com/widgets.js\';fjs.parentNode.insertBefore(js,fjs);}}(document, \'script\', \'twitter-wjs\');</script>'; }
 
+		//If We Have A Header Follow Button Option With Screename
+		if ($twitter_header_follow==3) { $twitteroutput.='<a href="https://twitter.com/'.$screenname.'" class="twitter-follow-button" data-show-count="false" data-show-screen-name="true" data-dnt="true">Follow &#64;'.$screenname.'</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?\'http\':\'https\';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+\'://platform.twitter.com/widgets.js\';fjs.parentNode.insertBefore(js,fjs);}}(document, \'script\', \'twitter-wjs\');</script>'; }
+
 		//End Header
 		$twitteroutput.='</div>';
 
@@ -638,10 +641,10 @@ function dt_twitter_display($tweetNoOverride=NULL) {
 		if($dtauto==1) {
 	
 			//Get Our Font Styling
-			$fontstyle=''; $fontsize=$dt_twitter_display_fontsize; if($dt_twitter_display_fontsize_unit==1) { $fontstyle=' style="font-size:'.$fontsize.'px;line-height:'.$fontsize.'px;'; if($dt_twitter_display_fontcolor) { $fontstyle.='color:'.$dt_twitter_display_fontcolor.';'; } $fontstyle.='"'; } else { $fontstyle=' style="font-size:'.$fontsize.'em;line-height:'.$fontsize.'%;'; if($dt_twitter_display_fontcolor) { $fontstyle.='color:'.$dt_twitter_display_fontcolor.';'; } $fontstyle.='"'; }
+			$fontstyle=''; $fontsize=$dt_twitter_display_fontsize; if($dt_twitter_display_fontsize_unit==1) { $fontstyle=' style="font-size:'.$fontsize.'px;line-height:'.$fontsize.'px;'; if($dt_twitter_display_fontcolor) { $fontstyle.='color:'.$dt_twitter_display_fontcolor.';'; } $fontstyle.='"'; } else { $fontstyle=' style="font-size:'.$fontsize.'em;line-height:auto;'; if($dt_twitter_display_fontcolor) { $fontstyle.='color:'.$dt_twitter_display_fontcolor.';'; } $fontstyle.='"'; }
 			
 			//Get Our Link Styling
-			$linkstyle=''; $fontsize=$dt_twitter_display_fontsize; if($dt_twitter_display_fontsize_unit==1) { $linkstyle='style="font-size:'.$fontsize.'px;line-height:'.$fontsize.'px;'; if($dt_twitter_display_linkcolor) { $linkstyle.='color:'.$dt_twitter_display_linkcolor.';'; } $linkstyle.='"'; } else { $linkstyle='style="font-size:'.$fontsize.'em;line-height:'.$fontsize.'%;'; if($dt_twitter_display_linkcolor) { $linkstyle.='color:'.$dt_twitter_display_linkcolor.';'; } $linkstyle.='"'; }
+			$linkstyle=''; $fontsize=$dt_twitter_display_fontsize; if($dt_twitter_display_fontsize_unit==1) { $linkstyle='style="font-size:'.$fontsize.'px;line-height:'.$fontsize.'px;'; if($dt_twitter_display_linkcolor) { $linkstyle.='color:'.$dt_twitter_display_linkcolor.';'; } $linkstyle.='"'; } else { $linkstyle='style="font-size:'.$fontsize.'em;line-height:auto;'; if($dt_twitter_display_linkcolor) { $linkstyle.='color:'.$dt_twitter_display_linkcolor.';'; } $linkstyle.='"'; }
 			
 			//If We Have Tweet Link Color Set
 			if ($dt_twitter_display_linkcolor) { $req_tweet=str_replace('<a','<a style="color:'.$dt_twitter_display_linkcolor.';"',$req_tweet); }
@@ -749,6 +752,9 @@ function dt_twitter_display($tweetNoOverride=NULL) {
 	
 	//If We Have A Follow Button Option
 	if ($twitterfollow==2) { $twitteroutput.='<a href="https://twitter.com/'.$screenname.'" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false" data-dnt="true">Follow</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?\'http\':\'https\';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+\'://platform.twitter.com/widgets.js\';fjs.parentNode.insertBefore(js,fjs);}}(document, \'script\', \'twitter-wjs\');</script>'; }
+	
+	//If We Have A Follow Button Option With Screename
+	if ($twitterfollow==3) { $twitteroutput.='<a href="https://twitter.com/'.$screenname.'" class="twitter-follow-button" data-show-count="false" data-show-screen-name="true" data-dnt="true">Follow &#64;'.$screenname.'</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?\'http\':\'https\';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+\'://platform.twitter.com/widgets.js\';fjs.parentNode.insertBefore(js,fjs);}}(document, \'script\', \'twitter-wjs\');</script>'; }
 	
 	//Return The Output
 	return $twitteroutput;

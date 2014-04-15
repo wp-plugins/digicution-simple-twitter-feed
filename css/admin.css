@@ -86,6 +86,7 @@ p.labeldesc												{ margin:0; padding:0; line-height:11px; font-size:11px; 
 .dt-setting input										{ width:180px; }
 .dt-setting input.full, .dt-setting select.full			{ width:430px; }
 .dt-setting input.small, .dt-setting select.small		{ width:150px; }
+.dt-setting input.medium, .dt-setting select.medium		{ width:300px; }
 .dt-setting input.numberinput							{ width:120px; }
 .dt-setting select.numberinput							{ width:239px; margin-left:5px; }
 .dt-setting input.colourinput							{ width:120px; height:35px; padding:5px; }
@@ -135,6 +136,7 @@ p#dt-trademark em 										{ color: #99a2ab; }
 		/* Form CSS */
 		.dt-setting input.full, .dt-setting select.full			{ width:100%; font-size:12px; }
 		.dt-setting input.small, .dt-setting select.small		{ width:100%; font-size:12px; }
+		.dt-setting input.medium, .dt-setting select.medium		{ width:100%; font-size:12px; }
 		#dt input, #dt select									{ font-size:12px; }
 		.dt-setting select.numberinput							{ width:149px; }
 		.dt-setting select.colorselector						{ width:110px; }
