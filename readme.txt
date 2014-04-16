@@ -3,7 +3,7 @@ Contributors: digicution
 Donate link: http://www.digicution.com/
 Tags: twitter,feed,tweet,simple,list,display,digicution
 Requires at least: 3.1
-Tested up to: 3.8.3
+Tested up to: 3.9
 Stable tag: 1.4.2.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -102,6 +102,10 @@ OK, Double check... No, triple check that you have the correct Access Token, Acc
 = My Tweets are showing but they aren't mine?  Eh? =
 
 Please make sure that you have added YOUR Twitter Username into the Twitter Username option on the General Settings page.
+
+= My Tweet Follow Buttons are not showing, only the link text is being displayed? =
+
+This means that the app cannot reach Twitter's API server from your client machine.  Double check you haven;t got any apps that are blocking access.  One that has been found to do So is the Avast Anti Virus Browser Plugin.  Disable this and you should be golden.  Unfortunately, this is a client side restriction so there's nothing that can be done about it at present - this would be the same if you were to use Twitter's native Follow button :(
 
 = I have a question, bug or feature request...  Where can I submit it? =
 
