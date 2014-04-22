@@ -105,7 +105,7 @@ Please make sure that you have added YOUR Twitter Username into the Twitter User
 
 = My Tweet Follow Buttons are not showing, only the link text is being displayed? =
 
-This means that the app cannot reach Twitter's API server from your client machine.  Double check you haven;t got any apps that are blocking access.  One that has been found to do So is the Avast Anti Virus Browser Plugin.  Disable this and you should be golden.  Unfortunately, this is a client side restriction so there's nothing that can be done about it at present - this would be the same if you were to use Twitter's native Follow button :(
+This means that the app cannot reach Twitter's API server from your client machine.  Double check you haven't got any apps that are blocking access.  One that has been found to do so is the Avast Anti Virus Browser Plugin.  There is a setting within the Avast plugin titled "Block social networks by default".  Disable this and you should be golden.  Unfortunately, this is a client side restriction so there's nothing that can be done about it at present - this would be the same if you were to use Twitter's native Follow button :(
 
 = I have a question, bug or feature request...  Where can I submit it? =
 
