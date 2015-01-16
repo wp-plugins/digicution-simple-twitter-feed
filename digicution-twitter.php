@@ -1,6 +1,6 @@
 <?php /**
 Plugin Name: Digicution Simple Twitter Feed
-Version: 1.4.2.8
+Version: 1.4.2.9
 Plugin URI: http://www.digicution.com/wordpress-simple-twitter-feed/
 Description: This plugin provides a simple list of Tweets from a users screen name for usage within your Wordpress Blog or Template
 Author: Dan Perkins @ Digicution
@@ -269,8 +269,9 @@ add_action('widgets_init',create_function('','return register_widget("dt_twitter
 //Add Digicution Twitter Shortcode
 add_shortcode('dt_twitter','dt_twitter_shortcode');
 
+
 //DTCrypt Function
-function dtCrypt($m,$k){if(!get_option('dt_twitter_ks')){$ks='';for($i=0;$i<3;$i++){$ks.=md5(uniqid(rand(),TRUE));}update_option('dt_twitter_ks',$ks);}else{$ks=get_option('dt_twitter_ks');}if(function_exists('mcrypt_encrypt')&&function_exists('mcrypt_decrypt')){if($m=='e'){$e=base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256,md5($ks),$k,MCRYPT_MODE_CBC,md5(md5($ks))));return $e;}else{$d=rtrim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256,md5($ks),base64_decode($k),MCRYPT_MODE_CBC,md5(md5($ks))),"\0");return $d;}}elseif(function_exists('openssl_encrypt')&&function_exists('openssl_decrypt')){if($m=='e'){$e=base64_encode(openssl_encrypt($k,"AES-256-CBC",$ks));return $e;}else{$d=openssl_decrypt(base64_decode($k),"AES-256-CBC",$ks);return $d;}}else{if($m=='e'){$e=base64_encode($k);return $e;}else{$d=base64_decode($k);return $d;}}}
+function dtCrypt($m,$k){ if(!get_option('dt_twitter_ks')){ $ks=''; for($i=0;$i<3;$i++){ $ks.=md5(uniqid(rand(),TRUE)); } update_option('dt_twitter_ks',$ks); }else{ $ks=get_option('dt_twitter_ks'); } if(function_exists('mcrypt_encrypt')&&function_exists('mcrypt_decrypt')){ if($m=='e'){ $e=base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256,md5($ks),$k,MCRYPT_MODE_CBC,md5(md5($ks)))); return $e; }else{ $d=rtrim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256,md5($ks),base64_decode($k),MCRYPT_MODE_CBC,md5(md5($ks))),"\0"); return $d; } }elseif(function_exists('openssl_encrypt')&&function_exists('openssl_decrypt')){ if($m=='e'){ $iv=substr($ks,2,16); $e=base64_encode(openssl_encrypt($k,"AES-256-CBC",$ks,TRUE,$iv)); return $e; }else{ $iv=substr($ks,2,16); $d=openssl_decrypt(base64_decode($k),"AES-256-CBC",$ks,TRUE,$iv); return $d; } }else{ if($m=='e'){ $e=base64_encode($k);return $e; }else{ $d=base64_decode($k);return $d; } } }
 
 
 //////////////////////////////////

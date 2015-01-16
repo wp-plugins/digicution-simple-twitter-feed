@@ -220,21 +220,27 @@ function dt_twitter_update($tweetNoOverride=NULL) {
 						//Date From Twitter Is UTC - As Is PHP's, Thus Date Comparison Of 2 Gives Us Correct Time Difference.  Thanks To Maciek Nowakiewic​z For Pointing This Out (And Saving Me Time Doing Ridonculous UTC Calcs :)
 						$date=human_time_diff($date,time());
 									
-						//Clean Twitter ID
-						$tweetid=mysql_real_escape_string($tweetid);
+						//Make Sure Twitter ID Is Integer
+						$tweetid=intval($tweetid);
 						
-						//Check If Tweet Exists In DB
-						$tweetCheck=$wpdb->prepare("SELECT id FROM $table_dt_twitter WHERE tweetid=%d",$tweetid);
-						$tweetChecker=$wpdb->get_row($tweetCheck,OBJECT);
-											
-						//If We Have A Tweet With This ID - Delete The Record So We Can Insert New One, Updating Is So Last Year :)
-						if (!empty($tweetChecker)) { $wpdb->query("DELETE FROM $table_dt_twitter WHERE tweetid=".$tweetid); }
+						//If We Have A Tweet ID
+						if($tweetid) {
+							
+							//Check If Tweet Exists In DB
+							$tweetCheck=$wpdb->prepare("SELECT id FROM $table_dt_twitter WHERE tweetid=%d",$tweetid);
+							$tweetChecker=$wpdb->get_row($tweetCheck,OBJECT);
+												
+							//If We Have A Tweet With This ID - Delete The Record So We Can Insert New One, Updating Is So Last Year :)
+							if(!empty($tweetChecker)) { $wpdb->query($wpdb->prepare("DELETE FROM $table_dt_twitter WHERE tweetid=%d",$tweetid)); }
+															
+							//Set Tweet Refresh Date (UTC Global)
+							$tweetrefreshdate=date('Y-m-d H:i:s',time());
+							
+							//Insert Tweet Into DB
+							$wpdb->insert($table_dt_twitter, array('tweetid' => $tweetid, 'tweet' => $tweet, 'screenname' => $user_screen_name, 'profileimage' => $image, 'tweetdate' => $tweetrefreshdate, 'retweet' => $retweet, 'fullname' => $user_full_name, 'location' => $user_location, 'tweetreaddate' => $date));	
 						
-						//Set Tweet Refresh Date (UTC Global)
-						$tweetrefreshdate=date('Y-m-d H:i:s',time());
-						
-						//Insert Tweet Into DB
-						$wpdb->insert($table_dt_twitter, array('tweetid' => $tweetid, 'tweet' => $tweet, 'screenname' => $user_screen_name, 'profileimage' => $image, 'tweetdate' => $tweetrefreshdate, 'retweet' => $retweet, 'fullname' => $user_full_name, 'location' => $user_location, 'tweetreaddate' => $date));	
+						//End If Tweet ID	
+						}
 				
 					//End If Tweetcount Is Not More Than Size
 					}
