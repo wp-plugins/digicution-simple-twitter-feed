@@ -201,19 +201,35 @@ function dt_twitter_update($tweetNoOverride=NULL) {
 									
 						//Grab Tweet Entities
 						$entities = $t->entities;
-									
+								
 						//Set Counter To 0
 						$i = 0;
 						
-						//Convert URL Strings To Actual URLs
-						$tweet=dt_convert_urls($tweet);
-												
+						//For Each URL in Tweet - Convert It & Replace Tweet Text
+						foreach($entities->urls as $url) {
+							$indicate = $url->indices;
+							$replace[$i] = $url->url;
+							$string[$i] = "<a target='_blank' href='".$url->url."'>".$url->url."</a>";
+							$i++;
+						}
+						
+						//Add Mention Links 
+						foreach($entities->user_mentions as $mention) {
+							$indicate = $mention->indices;
+							$string[$i] = "<a target='_blank' href='http://www.twitter.com/".$mention->screen_name."'>".$mention->screen_name."</a>";
+							$replace[$i] = $mention->screen_name;
+							$i++;
+						}
+																		
 						//Loop Through Our Replacement Array & Make The Changes For URL's & Mention Links
 						for($i = 0; $i < count($string); $i++) {
 							$pattern = $replace[$i];
 							$tweet = str_replace($pattern, $string[$i], $tweet);
 						}
 						
+						//Convert Any Other URL Strings To Actual URLs
+						$tweet=dt_convert_urls($tweet);
+															
 						//Grab Tweet Date (UTC)
 						$date=strtotime($t->created_at);
 

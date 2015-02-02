@@ -4,7 +4,7 @@ Donate link: http://www.digicution.com/
 Tags: twitter,feed,tweet,simple,list,display,digicution
 Requires at least: 3.1
 Tested up to: 4.1
-Stable tag: 1.4.2.9
+Stable tag: 1.4.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -134,6 +134,9 @@ No problemo, just head to http://www.digicution.com/contact/ and submit the cont
 
 
 == Changelog ==
+
+= 1.4.3 =
+* Fixed bug with URL detection in some tweets where no space in front of URL string
 
 = 1.4.2.9 =
 * Fixed error when cleansing Tweet ID’s that generated a warning in PHP Log Files.  Thanks to Tony Hernandez for highlighting the issue.
