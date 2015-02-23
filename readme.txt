@@ -4,7 +4,7 @@ Donate link: http://www.digicution.com/
 Tags: twitter,feed,tweet,simple,list,display,digicution
 Requires at least: 3.1
 Tested up to: 4.1
-Stable tag: 1.4.3
+Stable tag: 1.4.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,7 +15,9 @@ This plugin provides a simple list of Tweets from a users screen name for usage 
 
 * If using OpenSSL encryption and upgrading from a version below 1.4.2.9 - you will be required to re-enter your Twitter API details to comply with the latest OpenSSL iv security implementation.
 
-Wordpress 3.8 Responsive Interface Design - Fully Backwards Compatible With Earlier Wordpress Releases.
+* If your Twitpics aren't displaying in 1.4.4 and above and you are using manual styling, please make sure you add a height property to the a.dt-twitter-media-image CSS property 
+
+Wordpress 4.1 Responsive Interface Design - Fully Backwards Compatible With Earlier Wordpress Releases (Down to 3.1).
 
 This plugin provides a simple list of Tweets from a users screen name for usage within your Wordpress Blog or Template.  
 
@@ -48,7 +50,7 @@ The ‘Digicution Simple Twitter Feed’ plugin includes a linking system to hoo
 * Tweet font size
 * Container width, background colour, padding & margins
 
-I’ve used it on around 20 sites so far and it seems to be working very well. However, if anyone finds any issues or bugs with the plugin, please let me know and I will endeavor to get them fixed as soon as I possibly can.  There are thousands of unique Wordpress installs out there and it is impossible for me to be able to test them all so, if you do find an issue, please report it at http://www.digicution.com/contact/ 
+I’ve used it on a number of sites and so far it seems to be working very well. However, if anyone finds any issues or bugs with the plugin, please let me know and I will endeavour to get them fixed as soon as I possibly can.  There are thousands of unique Wordpress installs out there and it is impossible for me to be able to test them all so, if you do find an issue, please report it at http://www.digicution.com/contact/ 
 
 The plugin *REQUIRES* PHP's cURL function to be installed and available.  If you're unsure, please install the plugin and the diagnostics will let you know if you are able to use it or not.
 
@@ -135,8 +137,15 @@ No problemo, just head to http://www.digicution.com/contact/ and submit the cont
 
 == Changelog ==
 
+= 1.4.4 =
+* Fixed bug with non-numeric detection on Tweet ID breaking update (or more commonly, only displaying 1 old Tweet in the feed).
+* Added force manual feed update function.
+* Added debug logging to the plugin.
+* Tweaked base list styling to remove list element style type and any margins / padding when using auto styling
+* Added media / image support.  You can now choose to show and view twitpics :)
+
 = 1.4.3 =
-* Fixed bug with URL detection in some tweets where no space in front of URL string
+* Fixed bug with URL detection in some tweets where no space in front of URL string.
 
 = 1.4.2.9 =
 * Fixed error when cleansing Tweet ID’s that generated a warning in PHP Log Files.  Thanks to Tony Hernandez for highlighting the issue.
@@ -210,6 +219,9 @@ No problemo, just head to http://www.digicution.com/contact/ and submit the cont
 
 
 == Upgrade Notice ==
+
+= 1.4.4 =
+If upgrading to 1.4.4, please ensure you use the new Force Twitter Feed Update once updated in order to refresh your tweet database.
 
 = 1.4.2.9 =
 If using OpenSSL encryption and upgrading from a version below 1.4.2.9 - you will be required to re-enter your Twitter API details to comply with the latest OpenSSL iv security implementation.

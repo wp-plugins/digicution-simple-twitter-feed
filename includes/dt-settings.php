@@ -14,6 +14,21 @@ function dt_admin() {
 	
 	//Define Tables
 	$table_dt_twitter=$wpdb->prefix."dt_twitter";
+	$table_dt_twitter_log=$wpdb->prefix."dt_twitter_log";
+	
+	////////////////////////////////////////
+	/////      Force Update Code      //////
+	////////////////////////////////////////
+	
+	if($_GET['force_dt_update']=='true' && $_GET['noheader']=='true') {
+		if($_GET['t']=='debug') { $_SESSION['dt_tab']='debug'; }
+		dt_twitter_update();
+		wp_redirect(get_admin_url().'?page=dt_setting');
+		exit();
+	}	
+		
+	//Debug Tab Switcher
+	if($_GET['viewdebug']=='true') { $_SESSION['dt_tab']='debug'; }	
 		
 	////////////////////////////////////////
 	/////  Application Settings Code  //////
@@ -84,6 +99,7 @@ function dt_admin() {
 		$dt_twitter_screenname_display=$_POST['dt_twitter_screenname_display'];
 		$dt_twitter_fullname_display=$_POST['dt_twitter_fullname_display'];
 		$dt_twitter_readdate_display=$_POST['dt_twitter_readdate_display'];
+		$dt_twitter_media_display=$_POST['dt_twitter_media_display'];
 		$dt_twitter_header_display=$_POST['dt_twitter_header_display'];
 		$dt_twitter_header_title=$_POST['dt_twitter_header_title'];
 		$dt_twitter_header_follow=$_POST['dt_twitter_header_follow'];
@@ -113,7 +129,8 @@ function dt_admin() {
 		update_option('dt_twitter_post_favourite',$dt_twitter_post_favourite);	
 		update_option('dt_twitter_screenname_display',$dt_twitter_screenname_display);	
 		update_option('dt_twitter_fullname_display',$dt_twitter_fullname_display);	
-		update_option('dt_twitter_readdate_display',$dt_twitter_readdate_display);	
+		update_option('dt_twitter_readdate_display',$dt_twitter_readdate_display);
+		update_option('dt_twitter_media_display',$dt_twitter_media_display);	
 		update_option('dt_twitter_header_display',$dt_twitter_header_display);	
 		update_option('dt_twitter_header_title',$dt_twitter_header_title);	
 		update_option('dt_twitter_header_follow',$dt_twitter_header_follow);
@@ -204,6 +221,22 @@ function dt_admin() {
 		$dt_twitter_icon_margintop_unit=$_POST['dt_twitter_icon_margintop_unit'];	
 		$dt_twitter_icon_spacing=$_POST['dt_twitter_icon_spacing'];	
 		$dt_twitter_icon_spacing_unit=$_POST['dt_twitter_icon_spacing_unit'];	
+		
+		//New Media Options
+		$dt_twitter_display_media_width=$_POST['dt_twitter_display_media_width'];
+		$dt_twitter_display_media_width_unit=$_POST['dt_twitter_display_media_width_unit'];
+		$dt_twitter_display_media_height=$_POST['dt_twitter_display_media_height'];
+		$dt_twitter_display_media_height_unit=$_POST['dt_twitter_display_media_height_unit'];
+		$dt_twitter_display_media_margintop=$_POST['dt_twitter_display_media_margintop'];
+		$dt_twitter_display_media_margintop_unit=$_POST['dt_twitter_display_media_margintop_unit'];
+		$dt_twitter_display_media_marginbottom=$_POST['dt_twitter_display_media_marginbottom'];
+		$dt_twitter_display_media_marginbottom_unit=$_POST['dt_twitter_display_media_marginbottom_unit'];
+		$dt_twitter_display_media_marginleft=$_POST['dt_twitter_display_media_marginleft'];
+		$dt_twitter_display_media_marginleft_unit=$_POST['dt_twitter_display_media_marginleft_unit'];
+		$dt_twitter_display_media_marginright=$_POST['dt_twitter_display_media_marginright'];
+		$dt_twitter_display_media_marginright_unit=$_POST['dt_twitter_display_media_marginright_unit'];
+		$dt_twitter_display_media_radius=$_POST['dt_twitter_display_media_radius'];
+		$dt_twitter_display_media_radius_unit=$_POST['dt_twitter_display_media_radius_unit'];
 				
 		//Clear General Message Session
 		$_SESSION['display_message']='';
@@ -238,6 +271,22 @@ function dt_admin() {
 		if(!$dt_twitter_display_tweetbradius) { $dt_twitter_display_tweetbradius=0; }
 		if(!$dt_twitter_icon_margintop) { $dt_twitter_icon_margintop=0; }
 		if(!$dt_twitter_icon_spacing) { $dt_twitter_icon_spacing=0; }
+
+		//New Media Options
+		if(!$dt_twitter_display_media_width) { $dt_twitter_display_media_width=0; }
+		if(!$dt_twitter_display_media_width_unit) { $dt_twitter_display_media_width_unit=0; }
+		if(!$dt_twitter_display_media_height) { $dt_twitter_display_media_height=0; }
+		if(!$dt_twitter_display_media_height_unit) { $dt_twitter_display_media_height_unit=0; }
+		if(!$dt_twitter_display_media_margintop) { $dt_twitter_display_media_margintop=0; }
+		if(!$dt_twitter_display_media_margintop_unit) { $dt_twitter_display_media_margintop_unit=0; }
+		if(!$dt_twitter_display_media_marginbottom) { $dt_twitter_display_media_marginbottom=0; }
+		if(!$dt_twitter_display_media_marginbottom_unit) { $dt_twitter_display_media_marginbottom_unit=0; }
+		if(!$dt_twitter_display_media_marginleft) { $dt_twitter_display_media_marginleft=0; }
+		if(!$dt_twitter_display_media_marginleft_unit) { $dt_twitter_display_media_marginleft_unit=0; }
+		if(!$dt_twitter_display_media_marginright) { $dt_twitter_display_media_marginright=0; }
+		if(!$dt_twitter_display_media_marginright_unit) { $dt_twitter_display_media_marginright_unit=0; }
+		if(!$dt_twitter_display_media_radius) { $dt_twitter_display_media_radius=0; }
+		if(!$dt_twitter_display_media_radius_unit) { $dt_twitter_display_media_radius_unit=0; }
 
 		//Check Padding / Margin Values Are Numeric - If So, Update Option Or Add Error Message
 		if (!is_numeric($dt_twitter_display_mcpaddingtop)) { $_SESSION['display_message'].="Please Enter A Numeric Value For The Main Container Top Padding<br/>"; } else { update_option('dt_twitter_display_mcpaddingtop',$dt_twitter_display_mcpaddingtop); }
@@ -307,11 +356,30 @@ function dt_admin() {
 		update_option('dt_twitter_icon_margintop_unit',$dt_twitter_icon_margintop_unit);
 		update_option('dt_twitter_icon_spacing_unit',$dt_twitter_icon_spacing_unit);
 		
+		//Update New Media Options
+		update_option('dt_twitter_display_media_width',$dt_twitter_display_media_width);
+		update_option('dt_twitter_display_media_width_unit',$dt_twitter_display_media_width_unit);
+		update_option('dt_twitter_display_media_height',$dt_twitter_display_media_height);
+		update_option('dt_twitter_display_media_height_unit',$dt_twitter_display_media_height_unit);
+		update_option('dt_twitter_display_media_margintop',$dt_twitter_display_media_margintop);
+		update_option('dt_twitter_display_media_margintop_unit',$dt_twitter_display_media_margintop_unit);
+		update_option('dt_twitter_display_media_marginbottom',$dt_twitter_display_media_marginbottom);
+		update_option('dt_twitter_display_media_marginbottom_unit',$dt_twitter_display_media_marginbottom_unit);
+		update_option('dt_twitter_display_media_marginleft',$dt_twitter_display_media_marginleft);
+		update_option('dt_twitter_display_media_marginleft_unit',$dt_twitter_display_media_marginleft_unit);
+		update_option('dt_twitter_display_media_marginright',$dt_twitter_display_media_marginright);
+		update_option('dt_twitter_display_media_marginright_unit',$dt_twitter_display_media_marginright_unit);
+		update_option('dt_twitter_display_media_radius',$dt_twitter_display_media_radius);
+		update_option('dt_twitter_display_media_radius_unit',$dt_twitter_display_media_radius_unit);
+		
 		//If No Errors
 		if(!$_SESSION['display_message']) { $_SESSION['display_success']="The Display Options Were Successfully Updated"; }
 		
 	//End Display Settings Function		
 	}
+	
+	//Set Tab If Necessary
+	if($_SESSION['dt_tab']) { $tab=$_SESSION['dt_tab']; $_SESSION['dt_tab']=''; }
 	?>
 		
 	<div class="wrap dt">
@@ -361,6 +429,7 @@ function dt_admin() {
 										<li><a id="tab-section-display" rel="display" href="#" <?php if ($tab=="display") {?>class="active"<?php } ?>><?php _e('Automatic Styling','digicution-simple-twitter-feed'); ?></a></li>
 										<li><a id="tab-section-manual" rel="manual" href="#" <?php if ($tab=="manual") {?>class="active"<?php } ?>><?php _e('Manual Styling','digicution-simple-twitter-feed'); ?></a></li>
 										<li><a id="tab-section-integrate" rel="integrate" href="#" <?php if ($tab=="integrate") {?>class="active"<?php } ?>><?php _e('How To Integrate','digicution-simple-twitter-feed'); ?></a></li>
+										<li><a id="tab-section-debug" rel="debug" href="#" <?php if ($tab=="debug") {?>class="active"<?php } ?>><?php _e('Logs','digicution-simple-twitter-feed'); ?></a></li>
 									<?php
 									//Otherwise - Disable These Until Details Completed
 									} else {
@@ -369,6 +438,7 @@ function dt_admin() {
 										<li><span class="inactive"><?php _e('Automatic Styling','digicution-simple-twitter-feed'); ?></span></li>
 										<li><span class="inactive"><?php _e('Manual Styling','digicution-simple-twitter-feed'); ?></span></li>
 										<li><span class="inactive"><?php _e('How To Integrate','digicution-simple-twitter-feed'); ?></span></li>
+										<li><span class="inactive"><?php _e('Logs','digicution-simple-twitter-feed'); ?></span></li>
 									<?php
 									//End If We Have OAuth Access Details
 									}
@@ -433,7 +503,7 @@ function dt_admin() {
 											} else {
 											?>
 												
-											<div class="description-instruct"><?php _e('In order to use this plugin, you must first create a Twitter application so that you can use the OAuth authentication techniques required for the plugin to function.','digicution-simple-twitter-feed'); ?><br/><br/><?php _e('Head to ','digicution-simple-twitter-feed'); ?><a href="https://dev.twitter.com/" target="_blank" />https://dev.twitter.com/</a><?php _e(' to create a Twitter Application and then simply enter the Application details in the fields below.','digicution-simple-twitter-feed'); ?><br/><br/><?php _e('If you\'re having problems with this plugin, please double check that you have the correct details from your Twitter App entered in the correct boxes below.','digicution-simple-twitter-feed'); ?></div><div class="clear"></div>
+											<div class="description-instruct"><?php _e('In order to use this plugin, you must first create a Twitter application so that you can use the OAuth authentication techniques required for the plugin to function.','digicution-simple-twitter-feed'); ?><br/><br/><?php _e('Head to ','digicution-simple-twitter-feed'); ?><a href="https://dev.twitter.com/" target="_blank" />https://dev.twitter.com/</a><?php _e(' to create a Twitter Application and then simply enter the Application details in the fields below.','digicution-simple-twitter-feed'); ?><br/><br/><?php _e('If you\'re having problems with this plugin, please double check that you have the correct details from your Twitter App entered in the correct boxes below.','digicution-simple-twitter-feed'); ?><br/><br/><?php _e('If you need to update your Twitter Feed manually, click the Force Twitter Feed Update button below.','digicution-simple-twitter-feed'); ?><br/><br/><a class="button-primary dtbutton" href="<?php echo get_admin_url(); ?>?page=dt_setting&force_dt_update=true&noheader=true">&nbsp;&nbsp;&nbsp;&nbsp;<?php _e('Force Twitter Feed Update','digicution-simple-twitter-feed'); ?>&nbsp;&nbsp;&nbsp;&nbsp;</a></div><div class="clear"></div>
 											
 											<?php	
 											}
@@ -692,6 +762,16 @@ function dt_admin() {
 							                    <option value="2"<?php if(get_option('dt_twitter_readdate_display')==2) { echo ' selected="selected"'; } ?>><?php _e('After Tweet','digicution-simple-twitter-feed'); ?></option>
 							                    <option value="1"<?php if(get_option('dt_twitter_readdate_display')==1) { echo ' selected="selected"'; } ?>><?php _e('Before Tweet','digicution-simple-twitter-feed'); ?></option>
 							                    <option value="0"<?php if((get_option('dt_twitter_readdate_display')==0) || (!get_option('dt_twitter_readdate_display'))) { echo ' selected="selected"'; } ?>><?php _e('No','digicution-simple-twitter-feed'); ?></option>
+							                    </select>
+												</div>
+
+												<div class="inputholder bottomgap">
+												<label for="dt_twitter_media_display"><?php _e('Display Tweet Media / Image:','digicution-simple-twitter-feed'); ?></label>
+												<p class="labeldesc"><?php _e('Please Indicate Whether You Would Like To Display Any Media Images','digicution-simple-twitter-feed'); ?></p>
+							                    <select name="dt_twitter_media_display" class="small">
+							                    <option value="2"<?php if(get_option('dt_twitter_media_display')==2) { echo ' selected="selected"'; } ?>><?php _e('After Tweet','digicution-simple-twitter-feed'); ?></option>
+							                    <option value="1"<?php if(get_option('dt_twitter_media_display')==1) { echo ' selected="selected"'; } ?>><?php _e('Before Tweet','digicution-simple-twitter-feed'); ?></option>
+							                    <option value="0"<?php if((get_option('dt_twitter_media_display')==0) || (!get_option('dt_twitter_media_display'))) { echo ' selected="selected"'; } ?>><?php _e('No','digicution-simple-twitter-feed'); ?></option>
 							                    </select>
 												</div>
 
@@ -1092,7 +1172,7 @@ function dt_admin() {
 									
 									<div class="dt-setting"<?php if(get_option('dt_twitter_images')==0) { echo ' style="display:none;"'; } ?>>
 										<fieldset class="rounded">
-										<legend><?php _e('Image Settings','digicution-simple-twitter-feed'); ?></legend>
+										<legend><?php _e('Profile Image Settings','digicution-simple-twitter-feed'); ?></legend>
 	
 											<div class="dt-setting type-text">
 
@@ -1208,6 +1288,96 @@ function dt_admin() {
 											
 										</fieldset>
 									</div>
+									
+									
+									<div class="dt-setting">
+										<fieldset class="rounded">
+										<legend><?php _e('Tweet Media / Image Settings','digicution-simple-twitter-feed'); ?></legend>
+	
+											<div class="dt-setting type-text">
+														
+												<div class="inputholder bottomgap">
+												<label for="dt_twitter_display_media_width"><?php _e('Media Width:','digicution-simple-twitter-feed'); ?></label>
+												<p class="labeldesc"><?php _e('Choose The Width Of Your Tweet Media In Pixels / Ems (0 For Full Width)','digicution-simple-twitter-feed'); ?></p>
+												<input id="dt_twitter_display_media_width" type="text" size="36" name="dt_twitter_display_media_width" class="numberinput left" value="<?php echo get_option('dt_twitter_display_media_width'); ?>" />
+							                    <select name="dt_twitter_display_media_width_unit" class="numberinput left">
+							                    <option value="1"<?php if((get_option('dt_twitter_display_media_width_unit')==1) || (!get_option('dt_twitter_display_media_width_unit'))) { echo ' selected="selected"'; } ?>><?php _e('Pixels','digicution-simple-twitter-feed'); ?></option>
+							                    <option value="0"<?php if(get_option('dt_twitter_display_media_width_unit')==0) { echo ' selected="selected"'; } ?>><?php _e('Ems','digicution-simple-twitter-feed'); ?></option>
+							                    </select>
+							                    <br class="clearer" />
+												</div>
+												
+												<div class="inputholder bottomgap">
+												<label for="dt_twitter_display_media_height"><?php _e('Media Height:','digicution-simple-twitter-feed'); ?></label>
+												<p class="labeldesc"><?php _e('Choose The Height Of Your Tweet Media In Pixels / Ems','digicution-simple-twitter-feed'); ?></p>
+												<input id="dt_twitter_display_media_height" type="text" size="36" name="dt_twitter_display_media_height" class="numberinput left" value="<?php echo get_option('dt_twitter_display_media_height'); ?>" />
+							                    <select name="dt_twitter_display_media_height_unit" class="numberinput left">
+							                    <option value="1"<?php if((get_option('dt_twitter_display_media_height_unit')==1) || (!get_option('dt_twitter_display_media_height_unit'))) { echo ' selected="selected"'; } ?>><?php _e('Pixels','digicution-simple-twitter-feed'); ?></option>
+							                    <option value="0"<?php if(get_option('dt_twitter_display_media_height_unit')==0) { echo ' selected="selected"'; } ?>><?php _e('Ems','digicution-simple-twitter-feed'); ?></option>
+							                    </select>
+							                    <br class="clearer" />
+												</div>
+												
+												<div class="inputholder bottomgap">
+												<label for="dt_twitter_display_media_margintop"><?php _e('Media Top Margin:','digicution-simple-twitter-feed'); ?></label>
+												<p class="labeldesc"><?php _e('Choose The Top Margin For The Tweet Media (Spacing Around The Top Of The Tweet Media) In Pixels / Percent','digicution-simple-twitter-feed'); ?></p>
+												<input id="dt_twitter_display_media_margintop" type="text" size="36" name="dt_twitter_display_media_margintop" class="numberinput left" value="<?php echo get_option('dt_twitter_display_media_margintop'); ?>" />
+							                    <select name="dt_twitter_display_media_margintop_unit" class="numberinput left">
+							                    <option value="1"<?php if((get_option('dt_twitter_display_media_margintop_unit')==1) || (!get_option('dt_twitter_display_media_margintop_unit'))) { echo ' selected="selected"'; } ?>><?php _e('Pixels','digicution-simple-twitter-feed'); ?></option>
+							                    <option value="0"<?php if(get_option('dt_twitter_display_media_margintop_unit')==0) { echo ' selected="selected"'; } ?>><?php _e('Percent','digicution-simple-twitter-feed'); ?></option>
+							                    </select>
+							                    <br class="clearer" />
+												</div>
+												
+												<div class="inputholder bottomgap">
+												<label for="dt_twitter_display_media_marginbottom"><?php _e('Media Bottom Margin:','digicution-simple-twitter-feed'); ?></label>
+												<p class="labeldesc"><?php _e('Choose The Bottom Margin For The Tweet Media (Spacing Around The Bottom Of The Tweet Media) In Pixels / Percent','digicution-simple-twitter-feed'); ?></p>
+												<input id="dt_twitter_display_media_marginbottom" type="text" size="36" name="dt_twitter_display_media_marginbottom" class="numberinput left" value="<?php echo get_option('dt_twitter_display_media_marginbottom'); ?>" />
+							                    <select name="dt_twitter_display_media_marginbottom_unit" class="numberinput left">
+							                    <option value="1"<?php if((get_option('dt_twitter_display_media_marginbottom_unit')==1) || (!get_option('dt_twitter_display_media_marginbottom_unit'))) { echo ' selected="selected"'; } ?>><?php _e('Pixels','digicution-simple-twitter-feed'); ?></option>
+							                    <option value="0"<?php if(get_option('dt_twitter_display_media_marginbottom_unit')==0) { echo ' selected="selected"'; } ?>><?php _e('Percent','digicution-simple-twitter-feed'); ?></option>
+							                    </select>
+							                    <br class="clearer" />
+												</div>
+												
+												<div class="inputholder bottomgap">
+												<label for="dt_twitter_display_media_marginleft"><?php _e('Media Left Margin:','digicution-simple-twitter-feed'); ?></label>
+												<p class="labeldesc"><?php _e('Choose The Left Margin For The Tweet Media (Spacing Around The Left Of The Tweet Media) In Pixels / Percent','digicution-simple-twitter-feed'); ?></p>
+												<input id="dt_twitter_display_media_marginleft" type="text" size="36" name="dt_twitter_display_media_marginleft" class="numberinput left" value="<?php echo get_option('dt_twitter_display_media_marginleft'); ?>" />
+							                    <select name="dt_twitter_display_media_marginleft_unit" class="numberinput left">
+							                    <option value="1"<?php if((get_option('dt_twitter_display_media_marginleft_unit')==1) || (!get_option('dt_twitter_display_media_marginleft_unit'))) { echo ' selected="selected"'; } ?>><?php _e('Pixels','digicution-simple-twitter-feed'); ?></option>
+							                    <option value="0"<?php if(get_option('dt_twitter_display_media_marginleft_unit')==0) { echo ' selected="selected"'; } ?>><?php _e('Percent','digicution-simple-twitter-feed'); ?></option>
+							                    </select>
+							                    <br class="clearer" />
+												</div>
+												
+												<div class="inputholder bottomgap">
+												<label for="dt_twitter_display_media_marginright"><?php _e('Media Right Margin:','digicution-simple-twitter-feed'); ?></label>
+												<p class="labeldesc"><?php _e('Choose The Right Margin For The Tweet Media (Spacing Around The Right Of The Tweet Media) In Pixels / Percent','digicution-simple-twitter-feed'); ?></p>
+												<input id="dt_twitter_display_media_marginright" type="text" size="36" name="dt_twitter_display_media_marginright" class="numberinput left" value="<?php echo get_option('dt_twitter_display_media_marginright'); ?>" />
+							                    <select name="dt_twitter_display_media_marginright_unit" class="numberinput left">
+							                    <option value="1"<?php if((get_option('dt_twitter_display_media_marginright_unit')==1) || (!get_option('dt_twitter_display_tweetmarginright_unit'))) { echo ' selected="selected"'; } ?>><?php _e('Pixels','digicution-simple-twitter-feed'); ?></option>
+							                    <option value="0"<?php if(get_option('dt_twitter_display_media_marginright_unit')==0) { echo ' selected="selected"'; } ?>><?php _e('Percent','digicution-simple-twitter-feed'); ?></option>
+							                    </select>
+							                    <br class="clearer" />
+												</div>
+												
+												<div class="inputholder">
+												<label for="dt_twitter_display_media_radius"><?php _e('Media Corner Radius:','digicution-simple-twitter-feed'); ?></label>
+												<p class="labeldesc"><?php _e('Choose The Rounded Corner Radius Of The Tweet Media (0 For Square Edges)','digicution-simple-twitter-feed'); ?></p>
+												<input id="dt_twitter_display_media_radius" type="text" size="36" name="dt_twitter_display_media_radius" class="numberinput left" value="<?php echo get_option('dt_twitter_display_media_radius'); ?>" />
+							                    <select name="dt_twitter_display_media_radius_unit" class="numberinput left">
+							                    <option value="1"<?php if((get_option('dt_twitter_display_media_radius_unit')==1) || (!get_option('dt_twitter_display_media_radius_unit'))) { echo ' selected="selected"'; } ?>><?php _e('Pixels','digicution-simple-twitter-feed'); ?></option>
+							                    <option value="0"<?php if(get_option('dt_twitter_display_media_radius_unit')==0) { echo ' selected="selected"'; } ?>><?php _e('Percent','digicution-simple-twitter-feed'); ?></option>
+							                    </select>
+							                    <br class="clearer" />
+												</div>
+																								
+											</div>
+											
+										</fieldset>
+									</div>
+
 									
 									<div class="dt-setting"></div>
 									<input type="hidden" name="option" value="displayupdate" />
@@ -1333,6 +1503,173 @@ function dt_admin() {
 								</div>	
 								
 							</div>	
+							
+							
+							<div <?php if ($tab=="debug") {?>style="display: block;"<?php } else { ?>style="display: none;"<?php } ?> class="setting-right-section" id="setting-debug">
+														
+								<div class="dt-setting" style="overflow:hidden !important;">
+																		
+									<div class="dt-setting">	
+										<fieldset class="rounded">
+										<legend><?php _e('Debug Log','digicution-simple-twitter-feed'); ?></legend>
+	
+											<div class="dt-setting type-text" id="setting_site_title">
+												
+												<div class="bottomgap">
+
+													<?php
+													//If View Debug Clicked
+													if($_GET['viewdebug']=='true') {
+													?>
+												
+														<?php _e('Occasionally, you may have issues with the Digicution Simple Twitter Plugin.  Unfortunately, there are millions of different possible Wordpress setups so sometimes, trying to get to the root of an issue with a particular install can be quite difficult!  So, I\'ve added this debug feature so I can more accurately (and quickly) retrieve information that will help me deduce what\'s going on!','digicution-simple-twitter-feed'); ?>
+														<br/><br/>
+														<?php _e('If you have no info under the debug log output heading below, make sure you click the "Force Twitter Feed Update" button below before submitting the log file to me.  You can do this easily by clicking the "Send This Info Via Email" button at the bottom of the page - just make sure you give me some insight as to who you are and what the problem is in the email before sending :)','digicution-simple-twitter-feed'); ?>
+														<br/><br/>
+														<a class="button-primary dtbutton" href="<?php echo get_admin_url(); ?>?page=dt_setting&force_dt_update=true&noheader=true&t=debug">&nbsp;&nbsp;&nbsp;&nbsp;<?php _e('Force Twitter Feed Update','digicution-simple-twitter-feed'); ?>&nbsp;&nbsp;&nbsp;&nbsp;</a><br/><br/>
+														<br/><br/><br/>
+														<h3><?php _e('Debug Log Output','digicution-simple-twitter-feed'); ?></h3><br/>
+														<pre style="width:400px; min-height:200px;"><?php
+															//Grab Logs
+															$logs=$wpdb->get_results("SELECT id,url_input,oauth_header,output,submitted,timestamp_to_date FROM $table_dt_twitter_log ORDER BY submitted DESC LIMIT 5",OBJECT);
+															
+															//If Logs
+															if($logs) {
+																
+																//Define Output
+																$outputHTML='';
+																
+																//Set PHP Version
+																$outputHTML.='<strong>PHP Version:</strong> '.phpversion().PHP_EOL;
+																
+																//Set Site Title
+																$outputHTML.='<strong>Site Title:</strong> '.get_bloginfo('name').PHP_EOL;
+																
+																//Set Site URL
+																$outputHTML.='<strong>Site URL:</strong> '.get_bloginfo('url').PHP_EOL;
+																
+																//Work Out Encryption Type
+																if(function_exists('mcrypt_encrypt')&&function_exists('mcrypt_decrypt')){ $outputHTML.='<strong>Encryption Type:</strong> MCrypt'.PHP_EOL; } elseif(function_exists('openssl_encrypt')&&function_exists('openssl_decrypt')){ $outputHTML.='<strong>Encryption Type:</strong> OpenSSL'.PHP_EOL; } else { $outputHTML.='<strong>Encryption Type:</strong> Base64'.PHP_EOL; }
+																
+																//Set Wordpress Current Time
+																$outputHTML.='<strong>Wordpress Date / Time:</strong> '.current_time('Y-m-d H:i:s').PHP_EOL;
+																
+																//Set Server Current Time
+																$outputHTML.='<strong>Server Date / Time:</strong> '.date("Y-m-d H:i:s").PHP_EOL;
+																
+																//Add Line Break
+																$outputHTML.=PHP_EOL;
+																
+																//Loop
+																foreach($logs as $log) {
+																	
+																	//Construct
+																	$outputHTML.='<strong>ID:</strong> '.$log->id.PHP_EOL;
+																	$outputHTML.='<strong>URL:</strong> '.$log->url_input.PHP_EOL;
+																	$outputHTML.='<strong>OAuth Headers:</strong> '.$log->oauth_header.PHP_EOL;
+																	$outputHTML.='<strong>Output:</strong> '.$log->output.PHP_EOL;
+																	$outputHTML.='<strong>Submitted:</strong> '.$log->submitted.PHP_EOL;
+																	$outputHTML.='<strong>Timestamp 2 Date:</strong> '.$log->timestamp_to_date.PHP_EOL.PHP_EOL;
+																	
+																//End Loop	
+																}
+																
+																//Output
+																echo $outputHTML;
+															
+															//Otherwise, No Logs	
+															} else {
+																
+																//Inform User
+																echo 'No Logs Recorded Yet';
+															
+															//End If Logs	
+															}
+															?>
+														</pre>
+														
+														<h3><?php _e('Current Tweet Cache','digicution-simple-twitter-feed'); ?></h3><br/>
+														<pre style="width:400px; min-height:200px;"><?php
+															//Grab Logs
+															$logs=$wpdb->get_results("SELECT tweetid,tweet,screenname,profileimage,retweet,tweetdate,fullname,location,tweetreaddate,tweetrawdate,media FROM $table_dt_twitter ORDER BY id ASC",OBJECT);
+															
+															//If Logs
+															if($logs) {
+																
+																//Define Output
+																$outputHTMLTweets='';
+																
+																//Loop
+																foreach($logs as $log) {
+																	
+																	//Construct
+																	$outputHTMLTweets.='<strong>Tweet ID:</strong> '.$log->tweetid.PHP_EOL;
+																	$outputHTMLTweets.='<strong>Tweet:</strong> '.$log->tweet.PHP_EOL;
+																	$outputHTMLTweets.='<strong>Screen Name:</strong> '.$log->screenname.PHP_EOL;
+																	$outputHTMLTweets.='<strong>Profile Image URL:</strong> '.$log->profileimage.PHP_EOL;
+																	$outputHTMLTweets.='<strong>Retweet:</strong> '.$log->retweet.PHP_EOL;
+																	$outputHTMLTweets.='<strong>Tweet Date:</strong> '.$log->tweetdate.PHP_EOL;
+																	$outputHTMLTweets.='<strong>Full Name:</strong> '.$log->fullname.PHP_EOL;
+																	$outputHTMLTweets.='<strong>Location:</strong> '.$log->location.PHP_EOL;
+																	$outputHTMLTweets.='<strong>Tweet Read Date:</strong> '.$log->tweetreaddate.PHP_EOL;
+																	$outputHTMLTweets.='<strong>Tweet Raw Date:</strong> '.$log->tweetrawdate.PHP_EOL;
+																	$outputHTMLTweets.='<strong>Tweet Media:</strong> '.$log->media.PHP_EOL.PHP_EOL;
+																	
+																//End Loop	
+																}
+																
+																//Output
+																echo $outputHTMLTweets;
+															
+															//Otherwise, No Logs	
+															} else {
+																
+																//Inform User
+																echo 'No Tweets Stored Yet';
+															
+															//End If Logs	
+															}
+															?>
+														</pre>
+														
+														<?php
+														//Set Email Output
+														$emailOutput=str_replace('<strong>','',$outputHTML);
+														$emailOutput=str_replace('</strong>','',$emailOutput);
+														$emailTweetOutput=str_replace('<strong>','',$outputHTMLTweets);
+														$emailTweetOutput=str_replace('</strong>','',$emailTweetOutput);
+														$emailOutput=str_replace('+',' ',urlencode('-- DEBUG OUTPUT --'.PHP_EOL.PHP_EOL.$emailOutput.PHP_EOL.PHP_EOL.'-- TWEET CACHE DUMP --'.PHP_EOL.PHP_EOL.$emailTweetOutput));
+														?>
+														
+														<a class="button-primary dtbutton" href="mailto:dan@digicution.com?subject=Digicution Simple Twitter Feed Debug Output - <?php echo get_site_url() ;?>&body=<?php echo $emailOutput; ?>">&nbsp;&nbsp;&nbsp;&nbsp;<?php _e('Send This Info Via Email','digicution-simple-twitter-feed'); ?>&nbsp;&nbsp;&nbsp;&nbsp;</a><br/><br/>
+
+													<?php
+													//Else Display Disclaimer
+													} else {
+													?>	
+														
+														<?php _e('Normally, you shouldn\'t need to consult these logs :)  However, if you are having issues with the plugin, it may be necessary for you to take a look at the info outputted and stored by the plugin or I may have requested that you send this info over to me.','digicution-simple-twitter-feed'); ?>
+														<br/><br/>
+														<?php _e('If you want to view the debug logs and Twitter cache, please click the button below','digicution-simple-twitter-feed'); ?>
+														<br/><br/>
+														<a class="button-primary dtbutton" href="<?php echo get_admin_url(); ?>?page=dt_setting&viewdebug=true">&nbsp;&nbsp;&nbsp;&nbsp;<?php _e('View Debug Logs','digicution-simple-twitter-feed'); ?>&nbsp;&nbsp;&nbsp;&nbsp;</a><br/><br/>
+														
+													<?php
+													//End	
+													}
+													?>
+													
+												</div>
+												
+											</div>
+											
+										</fieldset>
+									</div>
+																																						
+								</div>	
+								
+							</div>	
+							
 							
 							<?php //End Tabbed Content ?>
 														

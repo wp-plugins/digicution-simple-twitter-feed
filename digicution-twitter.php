@@ -1,6 +1,6 @@
 <?php /**
 Plugin Name: Digicution Simple Twitter Feed
-Version: 1.4.3
+Version: 1.4.4
 Plugin URI: http://www.digicution.com/wordpress-simple-twitter-feed/
 Description: This plugin provides a simple list of Tweets from a users screen name for usage within your Wordpress Blog or Template
 Author: Dan Perkins @ Digicution
@@ -15,9 +15,15 @@ Author URI: http://www.digicution.com
 //Define Globals
 global $wp_version, $wpdb;
 
+//Set Current DB Version
+$dt_twitter_db_version='1.1';
+
 //Check Wordpress Version
 $exit_msg='Digicution Simple Twitter Feed Plugin Requires WordPress 3.1 or Newer. <a href="http://codex.wordpress.org/Upgrading_WordPress">Please Update!</a>';
 if (version_compare($wp_version,"3.1","<")) { exit($exit_msg); }
+
+//If Outdated Database - Run DB Update
+if(get_option('dt_twitter_db_version',true)!=$dt_twitter_db_version) { dt_twitter_database_update($dt_twitter_db_version); }
 
 //Define The Plugin's URL
 define('DT_SUBDIR','/'.str_replace(basename(__FILE__),'',plugin_basename(__FILE__)));
@@ -119,6 +125,9 @@ function dt_install() {
 	  `fullname` varchar(255),
 	  `location` varchar(255),
 	  `tweetreaddate` varchar(255),
+	  `tweetrawdate` varchar(255),
+	  `media` varchar(255) DEFAULT NULL,
+	  `media_url` varchar(255) DEFAULT NULL,
 	  PRIMARY KEY  (`id`)
 	) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;";
 		
@@ -127,6 +136,24 @@ function dt_install() {
 	
 	//Install Table Using Wordpress dbDelta Function
 	dbDelta($sql_dt_twitter); }
+		
+	$table_dt_twitter_log=$wpdb->prefix."dt_twitter_log";
+	if($wpdb->get_var("show tables like '$table_dt_twitter_log'") != $table_dt_twitter_log) {
+	$sql_dt_twitter_log="CREATE TABLE ".$table_dt_twitter_log." (
+	  `id` int(11) NOT NULL AUTO_INCREMENT,
+	  `url_input` text,
+	  `oauth_header` text,
+	  `output` text,
+	  `submitted` datetime DEFAULT NULL,
+	  `timestamp_to_date` datetime DEFAULT NULL,
+	  PRIMARY KEY (`id`)
+	) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;";
+				
+	//Grab Wordpress Upgrade Page
+	require_once(ABSPATH.'wp-admin/includes/upgrade.php');
+	
+	//Install Table Using Wordpress dbDelta Function
+	dbDelta($sql_dt_twitter_log); }
 	
 	//Add Default Wordpress Options (If They Don't Exist - Hence We Are Using Add Option - Not Update)
 	add_option('dt_twitter_screenname','digicution');
@@ -149,6 +176,25 @@ function dt_install() {
 	add_option('dt_twitter_consumer_key',NULL);	
 	add_option('dt_twitter_consumer_secret',NULL);
 	
+	//New Media Image Options
+	add_option('dt_twitter_display_media_width',0);
+	add_option('dt_twitter_display_media_width_unit',1);
+	add_option('dt_twitter_display_media_height',100);
+	add_option('dt_twitter_display_media_height_unit',1);
+	add_option('dt_twitter_display_media_margintop',10);
+	add_option('dt_twitter_display_media_margintop_unit',1);
+	add_option('dt_twitter_display_media_marginbottom',10);
+	add_option('dt_twitter_display_media_marginbottom_unit',1);
+	add_option('dt_twitter_display_media_marginleft',0);
+	add_option('dt_twitter_display_media_marginleft_unit',1);
+	add_option('dt_twitter_display_media_marginright',0);
+	add_option('dt_twitter_display_media_marginright_unit',1);
+	add_option('dt_twitter_display_media_radius',4);
+	add_option('dt_twitter_display_media_radius_unit',1);
+	
+	//New DB Option
+	add_option('dt_twitter_db_version',$dt_twitter_db_version);	
+	
 }
 
 //Register Activation Hook To Install Tables & Options
@@ -166,9 +212,11 @@ function dt_uninstall() {
 	
 	//Define SQL Tables For Deletion
 	$table_dt_twitter=$wpdb->prefix."dt_twitter";
+	$table_dt_twitter_log=$wpdb->prefix."dt_twitter_log";
 
 	//Drop SQL Table If It Exists
 	$wpdb->query("DROP TABLE IF EXISTS $table_dt_twitter");
+	$wpdb->query("DROP TABLE IF EXISTS $table_dt_twitter_log");
 	
 }
 
@@ -297,4 +345,100 @@ function dt_languages() {
 
 //Load Language Files Once Plugn Loaded
 add_action('plugins_loaded','dt_languages');
+
+
+///////////////////////////////////
+////  Database Update Function  ////
+///////////////////////////////////
+
+function dt_twitter_database_update($version) {
+	
+	//Define Wordpress Conn As Global
+	global $wpdb;
+	
+	//Install Digicution Simple Twitter Feed Database Table
+	$table_dt_twitter=$wpdb->prefix."dt_twitter";
+	
+	if($wpdb->get_var("SHOW TABLES LIKE '$table_dt_twitter'")==$table_dt_twitter) { $wpdb->query("DROP TABLE $table_dt_twitter"); }
+	$sql_dt_twitter="
+		CREATE TABLE $table_dt_twitter (
+			`id` int(11) NOT NULL auto_increment,
+			`tweetid` varchar(255) NOT NULL,
+			`tweet` text NOT NULL,
+			`screenname` varchar(255),
+			`profileimage` varchar(255),
+			`retweet` int(1),
+			`tweetdate` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+			`fullname` varchar(255),
+			`location` varchar(255),
+			`tweetreaddate` varchar(255),
+			`tweetrawdate` varchar(255),
+			`media` varchar(255) DEFAULT NULL,
+			`media_url` varchar(255) DEFAULT NULL,
+			PRIMARY KEY  (`id`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+	";
+			
+	//Run SQL
+	$wpdb->query($sql_dt_twitter);
+		
+	$table_dt_twitter_log=$wpdb->prefix."dt_twitter_log";
+	if($wpdb->get_var("SHOW TABLES LIKE '$table_dt_twitter_log'")==$table_dt_twitter_log) { $wpdb->query("DROP TABLE $table_dt_twitter_log"); }
+	$sql_dt_twitter_log="
+		CREATE TABLE $table_dt_twitter_log (
+		`id` int(11) NOT NULL AUTO_INCREMENT,
+		`url_input` text,
+		`oauth_header` text,
+		`output` text,
+		`submitted` datetime DEFAULT NULL,
+		`timestamp_to_date` datetime DEFAULT NULL,
+		PRIMARY KEY (`id`)
+		) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+	";
+			
+	//Run SQL
+	$wpdb->query($sql_dt_twitter_log);
+			
+	//Add Default Wordpress Options (If They Don't Exist - Hence We Are Using Add Option - Not Update)
+	add_option('dt_twitter_screenname','digicution');
+	add_option('dt_twitter_tweetsize',5);
+	add_option('dt_twitter_twitterupdate',3600);
+	add_option('dt_twitter_images',1);
+	add_option('dt_twitter_retweet',1);	
+	add_option('dt_twitter_follow',0);
+	add_option('dt_twitter_post_expand',0);	
+	add_option('dt_twitter_post_reply',0);	
+	add_option('dt_twitter_post_retweet',0);	
+	add_option('dt_twitter_post_favourite',0);
+	add_option('dt_twitter_hashtag_convert',1);
+	add_option('dt_twitter_username_convert',1);
+	add_option('dt_twitter_image_bradius',0);
+	
+	//Add New API 1.1 OAuth Access Requirement Options
+	add_option('dt_twitter_oauth_access_token',NULL);	
+	add_option('dt_twitter_oauth_access_token_secret',NULL);	
+	add_option('dt_twitter_consumer_key',NULL);	
+	add_option('dt_twitter_consumer_secret',NULL);
+			
+	//New Media Image Options
+	add_option('dt_twitter_display_media_width',0);
+	add_option('dt_twitter_display_media_width_unit',1);
+	add_option('dt_twitter_display_media_height',100);
+	add_option('dt_twitter_display_media_height_unit',1);
+	add_option('dt_twitter_display_media_margintop',10);
+	add_option('dt_twitter_display_media_margintop_unit',1);
+	add_option('dt_twitter_display_media_marginbottom',10);
+	add_option('dt_twitter_display_media_marginbottom_unit',1);
+	add_option('dt_twitter_display_media_marginleft',0);
+	add_option('dt_twitter_display_media_marginleft_unit',1);
+	add_option('dt_twitter_display_media_marginright',0);
+	add_option('dt_twitter_display_media_marginright_unit',1);
+	add_option('dt_twitter_display_media_radius',4);
+	add_option('dt_twitter_display_media_radius_unit',1);
+			
+	//Update Option With Current Version
+	update_option('dt_twitter_db_version',$version);
+
+//End Database Update Function	
+}
 ?>

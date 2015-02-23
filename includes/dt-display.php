@@ -21,6 +21,7 @@ function dt_twitter_update($tweetNoOverride=NULL) {
 		
 		//Define Tables
 		$table_dt_twitter=$wpdb->prefix."dt_twitter";
+		$table_dt_twitter_log=$wpdb->prefix."dt_twitter_log";
 		
 		///////////////////////////////////
 		////// Construct Twitter URL //////
@@ -67,7 +68,7 @@ function dt_twitter_update($tweetNoOverride=NULL) {
 			///////////////////////////////////////
 			////// Construct Twitter Details //////
 			///////////////////////////////////////
-			
+
 			//Construct oAuth Hash
 			$oauth_hash = '';
 			$oauth_hash .= 'count='.$size.'&';
@@ -129,11 +130,24 @@ function dt_twitter_update($tweetNoOverride=NULL) {
 			curl_setopt($curl_request, CURLOPT_RETURNTRANSFER, true);
 			curl_setopt($curl_request, CURLOPT_SSL_VERIFYPEER, false);
 			$json = curl_exec($curl_request);
-			curl_close($curl_request);	
+			curl_close($curl_request);
+	
+			//Temp Testing
+			//$json=$wpdb->get_var("SELECT json FROM wp_dt_twitter_testing WHERE id=1");
 	
 			//Decode Data Ready For Processing
 			$data=json_decode($json);
 				
+			//Set Timestamp
+			$timestamp=date("Y-m-d H:i:s");
+			$timestamp_to_date=date("Y-m-d H:i:s",time());
+			
+			//Log Input
+			$wpdb->insert($table_dt_twitter_log,array('url_input'=>$url,'oauth_header'=>$oauth_header,'output'=>$json,'submitted'=>$timestamp,'timestamp_to_date'=>$timestamp_to_date));
+				
+			//Get Last Inserted
+			$logID=$wpdb->insert_id;
+			
 			//For Debugging Purposes - Display All Info Returned By Twitter API
 			//print_r($json);
 			//echo '<br/><br/>';
@@ -155,7 +169,7 @@ function dt_twitter_update($tweetNoOverride=NULL) {
 						
 				//Loop Through Tweets
 				foreach($data as $t) {
-			
+						
 					//Add 1 To Tweetcounter
 					$tweetcount++;
 					
@@ -168,7 +182,7 @@ function dt_twitter_update($tweetNoOverride=NULL) {
 								
 						//Get Tweet ID For Date Link - Added Str Val (And id_str Rather Than id To Remove Any Possible +E Numbers In Certain PHP Installs)
 						$tweetid=strval($t->id_str);
-												
+																		
 						//Grab User Vars
 						$user=$t->user;
 						
@@ -206,21 +220,37 @@ function dt_twitter_update($tweetNoOverride=NULL) {
 						$i = 0;
 						
 						//For Each URL in Tweet - Convert It & Replace Tweet Text
-						foreach($entities->urls as $url) {
-							$indicate = $url->indices;
-							$replace[$i] = $url->url;
-							$string[$i] = "<a target='_blank' href='".$url->url."'>".$url->url."</a>";
-							$i++;
+						if($entities->urls) {
+							foreach($entities->urls as $url) {
+								$replace[$i] = $url->url;
+								$string[$i] = "<a target='_blank' href='".$url->url."'>".$url->url."</a>";
+								$i++;
+							}
 						}
 						
 						//Add Mention Links 
-						foreach($entities->user_mentions as $mention) {
-							$indicate = $mention->indices;
-							$string[$i] = "<a target='_blank' href='http://www.twitter.com/".$mention->screen_name."'>".$mention->screen_name."</a>";
-							$replace[$i] = $mention->screen_name;
-							$i++;
+						if($entities->user_mentions) {
+							foreach($entities->user_mentions as $mention) {
+								$string[$i] = "<a target='_blank' href='http://www.twitter.com/".$mention->screen_name."'>".$mention->screen_name."</a>";
+								$replace[$i] = $mention->screen_name;
+								$i++;
+							}
 						}
-																		
+						
+						//Clear Media	
+						$mediaURL='';
+						$mediaDisplayURL='';
+						
+						//If Retweet Media, Set
+						if($t->retweeted_status->entities->media[0]->media_url && $t->retweeted_status->entities->media[0]->type=='photo') { 
+							$mediaURL=$t->retweeted_status->entities->media[0]->media_url;
+							$mediaDisplayURL=$t->retweeted_status->entities->media[0]->display_url;
+						//Otherwise, Check For Normal Tweet Media
+						} elseif($entities->media[0]->media_url && $entities->media[0]->type=='photo') { 
+							$mediaURL=$entities->media[0]->media_url; 
+							$mediaDisplayURL=$entities->media[0]->display_url;
+						}
+																									
 						//Loop Through Our Replacement Array & Make The Changes For URL's & Mention Links
 						for($i = 0; $i < count($string); $i++) {
 							$pattern = $replace[$i];
@@ -229,19 +259,22 @@ function dt_twitter_update($tweetNoOverride=NULL) {
 						
 						//Convert Any Other URL Strings To Actual URLs
 						$tweet=dt_convert_urls($tweet);
-															
+												
+						//Set Tweet Raw Date For Storage		
+						$tweetrawdate=$t->created_at;		
+												
 						//Grab Tweet Date (UTC)
-						$date=strtotime($t->created_at);
+						$date=strtotime($tweetrawdate);
 
 						//Date From Twitter Is UTC - As Is PHP's, Thus Date Comparison Of 2 Gives Us Correct Time Difference.  Thanks To Maciek Nowakiewic​z For Pointing This Out (And Saving Me Time Doing Ridonculous UTC Calcs :)
 						$date=human_time_diff($date,time());
 									
-						//Make Sure Twitter ID Is Integer
-						$tweetid=intval($tweetid);
+						//Make Sure Twitter ID Is Numeric
+						$tweetid=preg_replace("/[^0-9]/","",$tweetid);
 						
 						//If We Have A Tweet ID
 						if($tweetid) {
-							
+														
 							//Check If Tweet Exists In DB
 							$tweetCheck=$wpdb->prepare("SELECT id FROM $table_dt_twitter WHERE tweetid=%d",$tweetid);
 							$tweetChecker=$wpdb->get_row($tweetCheck,OBJECT);
@@ -252,9 +285,12 @@ function dt_twitter_update($tweetNoOverride=NULL) {
 							//Set Tweet Refresh Date (UTC Global)
 							$tweetrefreshdate=date('Y-m-d H:i:s',time());
 							
+							//If No Location Set To Unknown
+							if(!$user_location) { $user_location='Unknown'; }
+														
 							//Insert Tweet Into DB
-							$wpdb->insert($table_dt_twitter, array('tweetid' => $tweetid, 'tweet' => $tweet, 'screenname' => $user_screen_name, 'profileimage' => $image, 'tweetdate' => $tweetrefreshdate, 'retweet' => $retweet, 'fullname' => $user_full_name, 'location' => $user_location, 'tweetreaddate' => $date));	
-						
+							$wpdb->insert($table_dt_twitter, array('tweetid' => $tweetid, 'tweet' => $tweet, 'screenname' => $user_screen_name, 'profileimage' => $image, 'tweetdate' => $tweetrefreshdate, 'retweet' => $retweet, 'fullname' => $user_full_name, 'location' => $user_location, 'tweetreaddate' => $date, 'tweetrawdate' => $tweetrawdate, 'media' => $mediaURL, 'media_url' => $mediaDisplayURL));	
+																			
 						//End If Tweet ID	
 						}
 				
@@ -263,7 +299,7 @@ function dt_twitter_update($tweetNoOverride=NULL) {
 				
 				//End For Each Tweet Loop		
 				}
-				
+							
 				//Optimize Wordpress Twitter Table
 				$wpdb->query("OPTIMIZE TABLE $table_dt_twitter"); 
 			
@@ -411,6 +447,7 @@ function dt_twitter_display($tweetNoOverride=NULL) {
 	$twitter_screenname_display=get_option('dt_twitter_screenname_display');
 	$twitter_fullname_display=get_option('dt_twitter_fullname_display');
 	$twitter_date_display=get_option('dt_twitter_readdate_display');
+	$twitter_media_display=get_option('dt_twitter_media_display');
 	$twitter_header_display=get_option('dt_twitter_header_display');
 	$twitter_header_title=get_option('dt_twitter_header_title');
 	$twitter_header_follow=get_option('dt_twitter_header_follow');
@@ -421,7 +458,7 @@ function dt_twitter_display($tweetNoOverride=NULL) {
 	if($tweetNoOverride) { $size=$tweetNoOverride; }
 
 	//Grab Tweets From DB
-	$queryTweets="SELECT tweetid, tweet, screenname, profileimage, fullname, tweetreaddate FROM $table_dt_twitter ORDER BY tweetid DESC LIMIT 0,".$size;
+	$queryTweets="SELECT tweetid, tweet, screenname, profileimage, fullname, tweetreaddate, media, media_url FROM $table_dt_twitter ORDER BY tweetid DESC LIMIT 0,".$size;
 	$tweety=$wpdb->get_results($queryTweets, OBJECT);
 	
 	//Get Automatic Styling Option
@@ -458,7 +495,7 @@ function dt_twitter_display($tweetNoOverride=NULL) {
 		$dt_twitter_display_mcbradius_unit=get_option('dt_twitter_display_mcbradius_unit');
 
 		//Create Our CSS Container Style
-		$style=' style="width:'.$dt_twitter_display_mcwidth;
+		$style=' style="list-style-type:none;margin:0;padding:0;width:'.$dt_twitter_display_mcwidth;
 		if ($dt_twitter_display_mcwidth_unit==1) { $style.='px;'; } else { $style.='%;'; }
 		if ($dt_twitter_display_mcpaddingtop) { $style.='padding-top:'.$dt_twitter_display_mcpaddingtop; if($dt_twitter_display_mcpaddingtop_unit==1) { $style.='px;'; } else { $style.='%;'; } }
 		if ($dt_twitter_display_mcpaddingbottom) { $style.='padding-bottom:'.$dt_twitter_display_mcpaddingbottom; if($dt_twitter_display_mcpaddingbottom_unit==1) { $style.='px;'; } else { $style.='%;'; } }
@@ -556,7 +593,7 @@ function dt_twitter_display($tweetNoOverride=NULL) {
 		if ($dt_twitter_display_tweetpaddingleft) { if ($dt_twitter_display_tweetpaddingleft_unit==1) { $dtpu='px'; } else { $dtpu='%'; } $listyle.='padding-left:'.$dt_twitter_display_tweetpaddingleft.$dtpu.';'; $lialtstyle.='padding-left:'.$dt_twitter_display_tweetpaddingleft.$dtpu.';'; } 
 		if ($dt_twitter_display_tweetpaddingright) { if ($dt_twitter_display_tweetpaddingright_unit==1) { $dtpu='px'; } else { $dtpu='%'; } $listyle.='padding-right:'.$dt_twitter_display_tweetpaddingright.$dtpu.';'; $lialtstyle.='padding-right:'.$dt_twitter_display_tweetpaddingright.$dtpu.';'; } 
 		if ($dt_twitter_display_tweetbradius) { if ($dt_twitter_display_tweetbradius_unit==1) { $dtpu='px'; } else { $dtpu='%'; } $listyle.='-moz-border-radius:'.$dt_twitter_display_tweetbradius.$dtpu.';-webkit-border-radius:'.$dt_twitter_display_tweetbradius.$dtpu.';-khtml-border-radius:'.$dt_twitter_display_tweetbradius.$dtpu.';border-radius:'.$dt_twitter_display_tweetbradius.$dtpu.';'; $lialtstyle.='-moz-border-radius:'.$dt_twitter_display_tweetbradius.$dtpu.';-webkit-border-radius:'.$dt_twitter_display_tweetbradius.$dtpu.';-khtml-border-radius:'.$dt_twitter_display_tweetbradius.$dtpu.';border-radius:'.$dt_twitter_display_tweetbradius.$dtpu.';'; } 
-
+				
 	//End If Automatic Styling Set To Yes
 	}
 
@@ -570,6 +607,8 @@ function dt_twitter_display($tweetNoOverride=NULL) {
 		$req_profileimage=$item->profileimage;
 		$req_fullname=$item->fullname;
 		$req_readdate=$item->tweetreaddate;
+		$req_media=$item->media;
+		$req_media_url=$item->media_url;
 				
 		//Add 1 To Oddity Counter
 		$oddity++;
@@ -640,6 +679,63 @@ function dt_twitter_display($tweetNoOverride=NULL) {
 		
 		//Add Main Tweet Container For Manual Styling
 		$req_tweet='<div class="dt-twitter-tweetbody">'.$req_tweet.'</div>';
+
+		
+		//If We Have Media
+		if($req_media) {
+			
+			//Set Base Styling
+			$twitter_media_style='display:block;background-size:cover;background-position:top center;';
+
+			//If Auto Styling
+			if($dtauto==1) {
+
+				//Grab Styling Options	
+				$dt_twitter_display_media_width=get_option('dt_twitter_display_media_width');
+				$dt_twitter_display_media_width_unit=get_option('dt_twitter_display_media_width_unit');
+				$dt_twitter_display_media_height=get_option('dt_twitter_display_media_height');
+				$dt_twitter_display_media_height_unit=get_option('dt_twitter_display_media_height_unit');
+				$dt_twitter_display_media_margintop=get_option('dt_twitter_display_media_margintop');
+				$dt_twitter_display_media_margintop_unit=get_option('dt_twitter_display_media_margintop_unit');
+				$dt_twitter_display_media_marginbottom=get_option('dt_twitter_display_media_marginbottom');
+				$dt_twitter_display_media_marginbottom_unit=get_option('dt_twitter_display_media_marginbottom_unit');
+				$dt_twitter_display_media_marginleft=get_option('dt_twitter_display_media_marginleft');
+				$dt_twitter_display_media_marginleft_unit=get_option('dt_twitter_display_media_marginleft_unit');
+				$dt_twitter_display_media_marginright=get_option('dt_twitter_display_media_marginright');
+				$dt_twitter_display_media_marginright_unit=get_option('dt_twitter_display_media_marginright_unit');
+				$dt_twitter_display_media_radius=get_option('dt_twitter_display_media_radius');
+				$dt_twitter_display_media_radius_unit=get_option('dt_twitter_display_media_radius_unit');
+				
+				//Clear Media Style
+				$mediastyle='';
+				
+				//Create Our Media CSS Style
+				if ($dt_twitter_display_media_width) { if($dt_twitter_display_media_width==0) { $mediastyle.='width:100%;'; } else { if ($dt_twitter_display_media_width_unit==1) { $dtpu='px'; } else { $dtpu='%'; } $mediastyle.='width:'.$dt_twitter_display_media_width.$dtpu.';'; } } else { $mediastyle.='width:100%;'; }
+				if ($dt_twitter_display_media_height) { if ($dt_twitter_display_media_height_unit==1) { $dtpu='px'; } else { $dtpu='%'; } $mediastyle.='height:'.$dt_twitter_display_media_height.$dtpu.';'; }
+				if ($dt_twitter_display_media_margintop) { if ($dt_twitter_display_media_margintop_unit==1) { $dtpu='px'; } else { $dtpu='%'; } $mediastyle.='margin-top:'.$dt_twitter_display_media_margintop.$dtpu.';'; } 
+				if ($dt_twitter_display_media_marginbottom) { if ($dt_twitter_display_media_marginbottom_unit==1) { $dtpu='px'; } else { $dtpu='%'; } $mediastyle.='margin-bottom:'.$dt_twitter_display_media_marginbottom.$dtpu.';'; } 
+				if ($dt_twitter_display_media_marginleft) { if ($dt_twitter_display_media_marginleft_unit==1) { $dtpu='px'; } else { $dtpu='%'; } $mediastyle.='margin-left:'.$dt_twitter_display_media_marginleft.$dtpu.';'; } 
+				if ($dt_twitter_display_media_marginright) { if ($dt_twitter_display_media_marginright_unit==1) { $dtpu='px'; } else { $dtpu='%'; } $mediastyle.='margin-right:'.$dt_twitter_display_media_marginright.$dtpu.';'; } 		
+				if ($dt_twitter_display_media_radius) { if ($dt_twitter_display_media_radius_unit==1) { $dtpu='px'; } else { $dtpu='%'; } $mediastyle.='-moz-border-radius:'.$dt_twitter_display_media_radius.$dtpu.';-webkit-border-radius:'.$dt_twitter_display_media_radius.$dtpu.';-khtml-border-radius:'.$dt_twitter_display_media_radius.$dtpu.';border-radius:'.$dt_twitter_display_media_radius.$dtpu.';'; } 
+			
+				//Add To Main Styling
+				$twitter_media_style=$twitter_media_style.$mediastyle;
+			
+			//End If Auto Styling
+			}
+						
+			//If We Have URL, Set It
+			if($req_media_url) { $urlstarter='<a href="http://'.$req_media_url.'" target="_blank" '; } else { $urlstarter='<a href="'.$req_media.'" target="_blank" '; }
+			
+			//If Display Media Before & We Have Media
+			if($twitter_media_display==1 && $req_media) { $req_tweet=$urlstarter.'class="dt-twitter-media-image" style="background:url(\''.$req_media.'\');'.$twitter_media_style.'"></a>'.$req_tweet; }	
+			
+			//If Display Media After & We Have Media
+			if($twitter_media_display==2 && $req_media) { $req_tweet.=$urlstarter.'class="dt-twitter-media-image" style="background:url(\''.$req_media.'\');'.$twitter_media_style.'"></a>'; }	
+			
+		//End If We Have media	
+		}
+			
 			
 		//Add Our Date If Turned On (Before)
 		if($twitter_date_display==1) { $req_tweet='<div class="dt-twitter-readdate"><a target="_blank" href="http://twitter.com/'.$req_screenname.'/status/'.$req_tweetid.'">about '.$req_readdate.' ago</a></div>'.$req_tweet; }
